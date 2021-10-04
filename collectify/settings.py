@@ -34,8 +34,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'categories',
     'collects',
-    'images',
-    'items',
     'users',
     'django.contrib.admin',
     'django.contrib.auth',
