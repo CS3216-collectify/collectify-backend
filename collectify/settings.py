@@ -82,8 +82,11 @@ WSGI_APPLICATION = 'collectify.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': secrets.DB_HOST,
+        'NAME': 'collectify_backend',
+        'USER': 'postgres',
+        'PASSWORD': secrets.DB_PASSWORD
     }
 }
 
