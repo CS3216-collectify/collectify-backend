@@ -11,7 +11,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     collection_creation_date = serializers.DateTimeField(source='collection_creation', read_only=True)
     user_id = serializers.ReadOnlyField(source='user.id')
     category_id = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Category.objects.all())
-    category_name = serializers.SlugRelatedField(read_only=True, slug_field='category_name')
+    category_name = serializers.ReadOnlyField(read_only=True, source='category_id.category_name')
 
     class Meta:
         model = Collect

@@ -12,11 +12,11 @@ collection_detail = views.CollectionViewSet.as_view({
 })
 
 collection_list = views.CollectionViewSet.as_view({
-    # 'get': 'list',
+    'get': 'list',
     'post': 'create'
 })
 
 urlpatterns = format_suffix_patterns([
     path('', collection_list, name='collection-list'),
-    path('<int:pk>/', collection_detail, name='collection-detail'),
+    path('<int:pk>', collection_detail, name='collection-detail'),
 ])
