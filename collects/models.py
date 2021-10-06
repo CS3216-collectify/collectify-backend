@@ -1,17 +1,18 @@
 from django.db import models
 from categories.models import Category
-from django.contrib.auth.models import User
+from authentication.models import User
 
 
 # Create your models here.
 
 class Collect(models.Model):
     collection_name = models.CharField(max_length=30)
-    collection_description = models.CharField(max_length=150)
+    collection_description = models.CharField(max_length=150, null=True)
     collection_creation = models.DateTimeField(auto_now_add=True)
     category_id = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
+        null=True
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

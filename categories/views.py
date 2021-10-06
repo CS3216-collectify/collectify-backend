@@ -1,7 +1,13 @@
-from django.http import JsonResponse
+from categories.models import Category
+from categories.serializers import CategorySerializer
+from rest_framework import mixins
+from rest_framework import generics
 
 
-# Create your views here.
+class CategoryList(mixins.ListModelMixin,
+                   generics.GenericAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
-def get_collections(request):
-    return JsonResponse({}, content_type='application/json')
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
