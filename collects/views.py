@@ -1,7 +1,10 @@
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework import status
+
 from collects.models import Collect
 from rest_framework import viewsets
-from collects.serializers import CollectionSerializer
+from collects.serializers import CollectionSerializer, CollectionSerializerWithImages
 
 
 def get_collections(request):
@@ -9,7 +12,12 @@ def get_collections(request):
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
-    serializer_class = CollectionSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CollectionSerializerWithImages
+        else:
+            return CollectionSerializer
 
     def get_queryset(self):
         queryset = Collect.objects.all()
@@ -31,3 +39,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        super(CollectionViewSet, self).update(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -17,3 +17,12 @@ class CollectionSerializer(serializers.ModelSerializer):
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
                   'user_id', 'category_id', 'category_name')
+
+
+class CollectionSerializerWithImages(CollectionSerializer):
+    cover_images = serializers.ListField(allow_empty=True, read_only=True)
+
+    class Meta:
+        model = Collect
+        fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
+                  'user_id', 'category_id', 'category_name', 'cover_images')
