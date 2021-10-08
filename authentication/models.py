@@ -6,4 +6,5 @@ from django.contrib.auth.models import AbstractUser
 # it in the future if the need arises.
 class User(AbstractUser):
     # Add any properties here that is not already in the default django user.
-    pass
+    email = models.EmailField(unique=True)
+    picture = models.URLField(blank=True)

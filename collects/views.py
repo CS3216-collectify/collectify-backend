@@ -7,10 +7,6 @@ from rest_framework import viewsets
 from collects.serializers import CollectionSerializer, CollectionSerializerWithImages
 
 
-def get_collections(request):
-    return JsonResponse({}, content_type='application/json')
-
-
 class CollectionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):

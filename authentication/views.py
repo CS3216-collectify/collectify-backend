@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status, permissions
 from rest_framework.response import Response
@@ -17,9 +17,14 @@ class UserCreate(APIView):
 
     def post(self, request, format='json'):
         serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                json = serializer.data
-                return Response(json, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            if serializer.is_valid():
+                user = serializer.save()
+                if user:
+                    json = serializer.data
+                    return Response(json, status=status.HTTP_201_CREATED)
+
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except APIException as err:
+            return Response({"detail": err.detail}, status=status.HTTP_400_BAD_REQUEST)
