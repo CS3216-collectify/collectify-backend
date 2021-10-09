@@ -17,7 +17,7 @@ class Collect(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def cover_images(self):
-        return [i.latest_image() for i in self.items.order_by('-item_creation')[:4] if i.latest_image()]
+        return [i.cover_image() for i in self.items.order_by('-item_creation')[:3] if i.cover_image()]
 
 
 class Item(models.Model):
@@ -26,15 +26,22 @@ class Item(models.Model):
     item_creation = models.DateTimeField(auto_now_add=True)
     collection_id = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
 
-    def latest_image(self):
+    def cover_image(self):
         images = self.images
         if images.exists():
             return images.latest('image_upload').image_url
         else:
             return None
+    
+    def all_images(self):
+        images = self.images.order_by('-image_upload')
+        if not images.exists():
+            return None
+        return None
+        #todo
 
 
 class Image(models.Model):
-    image_url = models.TextField()
+    image_url = models.URLField()
     image_upload = models.DateTimeField(auto_now_add=True)
     item_id = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)

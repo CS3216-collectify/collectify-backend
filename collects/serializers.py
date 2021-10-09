@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from categories.models import Category
-from collects.models import Collect
+from collects.models import Collect, Item
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -26,3 +26,20 @@ class CollectionSerializerWithImages(CollectionSerializer):
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
                   'user_id', 'category_id', 'category_name', 'cover_images')
+
+
+class ItemSerializer(serializers.ModelSerializer):
+    item_id = serializers.ReadOnlyField(source='id')
+    item_name = serializers.CharField(max_length=30)
+    item_description = serializers.CharField()
+    item_creation_date = serializers.DateTimeField(source='item_creation', read_only=True)
+    class Meta:
+        model = Item
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date']
+
+
+class ItemSerializerWithCover(ItemSerializer):
+    cover_image = serializers.URLField(read_only=True)
+    class Meta:
+        model = Item
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'cover_image']
