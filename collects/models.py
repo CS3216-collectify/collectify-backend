@@ -9,8 +9,9 @@ class Collect(models.Model):
     collection_name = models.CharField(max_length=30)
     collection_description = models.CharField(max_length=150, null=True)
     collection_creation = models.DateTimeField(auto_now_add=True)
-    category_id = models.ForeignKey(
+    category = models.ForeignKey(
         Category,
+        related_name="collects",
         on_delete=models.SET_NULL,
         null=True
     )
@@ -18,13 +19,16 @@ class Collect(models.Model):
 
     def cover_images(self):
         return [i.cover_image() for i in self.items.order_by('-item_creation')[:3] if i.cover_image()]
+    
+    def __str__(self):
+        return self.collection_name
 
 
 class Item(models.Model):
     item_name = models.CharField(max_length=30)
     item_description = models.TextField()
     item_creation = models.DateTimeField(auto_now_add=True)
-    collection_id = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
 
     def cover_image(self):
         images = self.images
@@ -39,9 +43,15 @@ class Item(models.Model):
             return None
         return None
         #todo
+    
+    def __str__(self):
+        return self.item_name
 
 
 class Image(models.Model):
     image_url = models.URLField()
     image_upload = models.DateTimeField(auto_now_add=True)
-    item_id = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.image_url
