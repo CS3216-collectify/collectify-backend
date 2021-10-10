@@ -2,6 +2,7 @@ from django.contrib.auth.models import update_last_login
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers, exceptions, status
 from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
 from google.oauth2 import id_token
@@ -18,13 +19,26 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # token['key_name'] = user.some_key
         return token
 
-    def validate(self, attrs):
-        if 'id_token' not in attrs:
-            # Use login credentials
-            return super().validate(attrs)
 
-        # Verify token
-        print(attrs['id_token'])
+class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
+
+    default_error_messages = {
+        'Invalid_id_token': 'Invalid id token.'
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['id_token'] = serializers.CharField()
+
+    @classmethod
+    def get_token(cls, user):
+        token = RefreshToken.for_user(user)
+
+        # Add custom claims:
+        # token['key_name'] = user.some_key
+        return token
+
+    def validate(self, attrs):
         try:
             # Specify the CLIENT_ID of the app that accesses the backend:
             idinfo = id_token.verify_oauth2_token(attrs['id_token'], requests.Request())
@@ -72,8 +86,8 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
             # Invalid token
             print(err)
             raise exceptions.AuthenticationFailed(
-                self.error_messages['Invalid ID Token'],
-                'Invalid_ID_Token',
+                self.error_messages['Invalid_id_token'],
+                'Invalid_id_token',
             )
 
 
