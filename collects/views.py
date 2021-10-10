@@ -1,10 +1,8 @@
-from django.http import JsonResponse
+from rest_framework import status, viewsets
 from rest_framework.response import Response
-from rest_framework import status
 
-from collects.models import Collect
-from rest_framework import viewsets
-from collects.serializers import CollectionSerializer, CollectionSerializerWithImages
+from collects.models import Collect, Item
+from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ItemSerializerWithCover, ItemSerializerWithImages
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -39,3 +37,29 @@ class CollectionViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         super(CollectionViewSet, self).update(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#explore drf-nested-routers
+class ItemViewSet(viewsets.ModelViewSet):
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ItemSerializerWithCover
+        else:
+            return ItemSerializerWithImages
+
+    def get_queryset(self):
+        queryset = Item.objects.all()
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit') 
+        collect_pk = self.kwargs.get('collect_pk')
+        
+        if collect_pk:
+            queryset = Item.objects.filter(collect=collect_pk)
+
+        if offset is not None and limit is not None:
+            queryset = queryset[int(offset):int(offset) + int(limit)]
+    
+    def update(self, request, *args, **kwargs):
+        super(CollectionViewSet, self).update(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
