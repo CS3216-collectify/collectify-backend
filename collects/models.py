@@ -45,7 +45,7 @@ class Item(models.Model):
 
 
 class Image(models.Model):
-    image_url = models.URLField()
+    image_url = models.ImageField(upload_to='item_images')
     image_upload = models.DateTimeField(auto_now_add=True)
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
 
