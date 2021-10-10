@@ -30,6 +30,9 @@ class Item(models.Model):
     item_creation = models.DateTimeField(auto_now_add=True)
     collection = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
 
+    def user(self):
+        return self.collection.user
+
     def cover_image(self):
         images = self.images
         if images.exists():
@@ -52,6 +55,9 @@ class Image(models.Model):
     image_url = models.URLField()
     image_upload = models.DateTimeField(auto_now_add=True)
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
+
+    def user(self):
+        return self.item.collection.user
 
     def __str__(self):
         return self.image_url

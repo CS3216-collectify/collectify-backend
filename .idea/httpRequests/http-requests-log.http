@@ -1,0 +1,446 @@
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODcxOTQ4LCJqdGkiOiI5YWVhYzNlZjRkM2M0M2M3YjUzZjAyMzc1YmJhMmNjMiIsInVzZXJfaWQiOjF9.18geXFfB2xnL0pJA0o2lGqIKLS7RAYz5l0hlkmcMP04
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T203021.201.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T203013.401.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODcxOTQ4LCJqdGkiOiI5YWVhYzNlZjRkM2M0M2M3YjUzZjAyMzc1YmJhMmNjMiIsInVzZXJfaWQiOjF9.18geXFfB2xnL0pJA0o2lGqIKLS7RAYz5l0hlkmcMP04
+Content-Type: application/json
+
+<> 2021-10-10T203003.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Content-Type: application/json
+
+<> 2021-10-10T202957.200.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+<> 2021-10-10T202935.401.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODcxOTQ4LCJqdGkiOiI5YWVhYzNlZjRkM2M0M2M3YjUzZjAyMzc1YmJhMmNjMiIsInVzZXJfaWQiOjF9.18geXFfB2xnL0pJA0o2lGqIKLS7RAYz5l0hlkmcMP04
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODcxOTQ4LCJqdGkiOiI5YWVhYzNlZjRkM2M0M2M3YjUzZjAyMzc1YmJhMmNjMiIsInVzZXJfaWQiOjF9.18geXFfB2xnL0pJA0o2lGqIKLS7RAYz5l0hlkmcMP04
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODcxOTQ4LCJqdGkiOiI5YWVhYzNlZjRkM2M0M2M3YjUzZjAyMzc1YmJhMmNjMiIsInVzZXJfaWQiOjF9.18geXFfB2xnL0pJA0o2lGqIKLS7RAYz5l0hlkmcMP04
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+<> 2021-10-10T202022.403.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODcxOTQ4LCJqdGkiOiI5YWVhYzNlZjRkM2M0M2M3YjUzZjAyMzc1YmJhMmNjMiIsInVzZXJfaWQiOjF9.18geXFfB2xnL0pJA0o2lGqIKLS7RAYz5l0hlkmcMP04
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+<> 2021-10-10T202000.403.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"username":"sampleuser","password":"12345678"}
+
+<> 2021-10-10T201908.200.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+<> 2021-10-10T201818.403.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","categoryId":"1"}
+
+<> 2021-10-10T201619.403.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T200656.500.html
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+<> 2021-10-10T200651.200.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T200557.403.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T200215.403.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T195937.403.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection4","categoryId":"1"}
+
+<> 2021-10-10T195825.403.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection4","categoryId":"1"}
+
+<> 2021-10-10T195634.403.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+{"collectionName":"sample collection7","collectionDescription":"sample description","categoryId":"2"}
+
+<> 2021-10-10T195609.403.json
+
+###
+
+GET http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNTA3NjQ2NSwianRpIjoiMmMzNjY4ZThkYTliNDA1MjlmNGM5YTZjZjNiM2VjYTAiLCJ1c2VyX2lkIjoxfQ.b9JZ4ffPrCjJHdJDuML8vyHsvI5csfa21cMWg78fVPU
+Content-Type: application/json
+
+<> 2021-10-10T195535.200.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"username":"sampleuser","password":"12345678"}
+
+<> 2021-10-10T195425.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T195354.200.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+{"collectionName":"sample collection5","collectionDescription":"sample description","categoryId":"1"}
+
+<> 2021-10-10T195343.403.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T195336.200.json
+
+###
+
+PATCH http://127.0.0.1:8000/collections/3/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+{"collectionName":"sample collection3","categoryId":"1"}
+
+<> 2021-10-10T195330.403.json
+
+###
+
+DELETE http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T195317.403.json
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+{"collectionName":"sample collection5","collectionDescription":"sample description","categoryId":"1"}
+
+<> 2021-10-10T184226.500.html
+
+###
+
+GET http://127.0.0.1:8000/collections/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T184209.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T183851.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T183233.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T182313.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T182255.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T182006.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T181812.200.json
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T172522.500.html
+
+###
+
+GET http://127.0.0.1:8000/collections/?user=1&category=1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T172506.500.html
+
+###
+
+GET http://127.0.0.1:8000/collections/5/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+<> 2021-10-10T171634.500.html
+
+###
+
+POST http://127.0.0.1:8000/collections/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNTk4NDU3LCJqdGkiOiI5M2IzYzFiMzBkOTg0MzI0YjgxMjhkY2I2NDU0ZmUwMCIsInVzZXJfaWQiOjF9.GvEUVFVUfP4P76iVNdCZz-aMiG6Re7yv4Ks3yFuaoS4
+Content-Type: application/json
+
+{"collectionName":"sample collection5","collectionDescription":"sample description","categoryId":"1"}
+
+<> 2021-10-10T171512.500.html
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"username":"sampleuser","password":"12345678"}
+
+<> 2021-10-10T165449.200.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/social/
+Content-Type: application/json
+
+{"idToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY0MTk2YWVlMTE5ZmUyMTU5M2Q0OGJmY2ZiNWJmMDAxNzdkZDRhNGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE2MjQyOTczNzE5ODIxMzc1NzM2IiwiZW1haWwiOiJxbC5jaGFuMjRAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJEX1JJc25HQWxRRmxpYy1hZC1POXBnIiwibmFtZSI6IkNoYW4gUWluIExpYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnhXMS1oMDNuN1VjNjVyb2ZqWDBfMXRMTkpXMjNFMkZYU1R4LVhXPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkNoYW4iLCJmYW1pbHlfbmFtZSI6IlFpbiBMaWFuZyIsImxvY2FsZSI6ImVuLUdCIiwiaWF0IjoxNjMzODUwMjAyLCJleHAiOjE2MzM4NTM4MDIsImp0aSI6IjExMDE5MTcwNDEyZTlmZTVkYWRiNGU4Mjg4ZWY4Mjk4NjhiNjFmNjQifQ.mIhwQONbbDWKtVuRt8_sUWDRxZvxDh7R9MK3Eg0zt2CNzGcWM0aBhtZw_JSRwtiauNaMNnD543CZGYYs_fWoYpVKDTuTqPC4IYuaU7weUdPN_xpDn6n3PPCIxn3ujIiWpwYdwIfC30bTZhS7sEplV3DEZZTcUv-u3dQkWXGXBUj8kMztR9PNpV_uWKOsMTtKUkF6vbdaq9SBQlSM9Hei1x70SNafEgBer8sKfDHQSqFxlEalouCmuL5pXuLR9yQBb2f05H2v8UiO9Gh0tos0WNacSigL9lO0iWU83YMwTvofZ5_v_JCD6xjl4MGt5eiyB8MywzV_APxhchinxKqNFw"}
+
+<> 2021-10-10T164727.401.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/social/
+Content-Type: application/json
+
+{"idToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY0MTk2YWVlMTE5ZmUyMTU5M2Q0OGJmY2ZiNWJmMDAxNzdkZDRhNGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE2MjQyOTczNzE5ODIxMzc1NzM2IiwiZW1haWwiOiJxbC5jaGFuMjRAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJEX1JJc25HQWxRRmxpYy1hZC1POXBnIiwibmFtZSI6IkNoYW4gUWluIExpYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnhXMS1oMDNuN1VjNjVyb2ZqWDBfMXRMTkpXMjNFMkZYU1R4LVhXPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkNoYW4iLCJmYW1pbHlfbmFtZSI6IlFpbiBMaWFuZyIsImxvY2FsZSI6ImVuLUdCIiwiaWF0IjoxNjMzODUwMjAyLCJleHAiOjE2MzM4NTM4MDIsImp0aSI6IjExMDE5MTcwNDEyZTlmZTVkYWRiNGU4Mjg4ZWY4Mjk4NjhiNjFmNjQifQ.mIhwQONbbDWKtVuRt8_sUWDRxZvxDh7R9MK3Eg0zt2CNzGcWM0aBhtZw_JSRwtiauNaMNnD543CZGYYs_fWoYpVKDTuTqPC4IYuaU7weUdPN_xpDn6n3PPCIxn3ujIiWpwYdwIfC30bTZhS7sEplV3DEZZTcUv-u3dQkWXGXBUj8kMztR9PNpV_uWKOsMTtKUkF6vbdaq9SBQlSM9Hei1x70SNafEgBer8sKfDHQSqFxlEalouCmuL5pXuLR9yQBb2f05H2v8UiO9Gh0tos0WNacSigL9lO0iWU83YMwTvofZ5_v_JCD6xjl4MGt5eiyB8MywzV_APxhchinxKqNFw"}
+
+<> 2021-10-10T162655.500.html
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"idToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY0MTk2YWVlMTE5ZmUyMTU5M2Q0OGJmY2ZiNWJmMDAxNzdkZDRhNGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE2MjQyOTczNzE5ODIxMzc1NzM2IiwiZW1haWwiOiJxbC5jaGFuMjRAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJEX1JJc25HQWxRRmxpYy1hZC1POXBnIiwibmFtZSI6IkNoYW4gUWluIExpYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnhXMS1oMDNuN1VjNjVyb2ZqWDBfMXRMTkpXMjNFMkZYU1R4LVhXPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkNoYW4iLCJmYW1pbHlfbmFtZSI6IlFpbiBMaWFuZyIsImxvY2FsZSI6ImVuLUdCIiwiaWF0IjoxNjMzODUwMjAyLCJleHAiOjE2MzM4NTM4MDIsImp0aSI6IjExMDE5MTcwNDEyZTlmZTVkYWRiNGU4Mjg4ZWY4Mjk4NjhiNjFmNjQifQ.mIhwQONbbDWKtVuRt8_sUWDRxZvxDh7R9MK3Eg0zt2CNzGcWM0aBhtZw_JSRwtiauNaMNnD543CZGYYs_fWoYpVKDTuTqPC4IYuaU7weUdPN_xpDn6n3PPCIxn3ujIiWpwYdwIfC30bTZhS7sEplV3DEZZTcUv-u3dQkWXGXBUj8kMztR9PNpV_uWKOsMTtKUkF6vbdaq9SBQlSM9Hei1x70SNafEgBer8sKfDHQSqFxlEalouCmuL5pXuLR9yQBb2f05H2v8UiO9Gh0tos0WNacSigL9lO0iWU83YMwTvofZ5_v_JCD6xjl4MGt5eiyB8MywzV_APxhchinxKqNFw"}
+
+<> 2021-10-10T152556.400.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"idToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY0MTk2YWVlMTE5ZmUyMTU5M2Q0OGJmY2ZiNWJmMDAxNzdkZDRhNGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNDAzMzI4NzE0NTEwLWFlcnJudjN1cTk0OHRrNWhma2hyOGViZjFpNmozbWZlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE2MjQyOTczNzE5ODIxMzc1NzM2IiwiZW1haWwiOiJxbC5jaGFuMjRAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJEX1JJc25HQWxRRmxpYy1hZC1POXBnIiwibmFtZSI6IkNoYW4gUWluIExpYW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnhXMS1oMDNuN1VjNjVyb2ZqWDBfMXRMTkpXMjNFMkZYU1R4LVhXPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkNoYW4iLCJmYW1pbHlfbmFtZSI6IlFpbiBMaWFuZyIsImxvY2FsZSI6ImVuLUdCIiwiaWF0IjoxNjMzODUwMjAyLCJleHAiOjE2MzM4NTM4MDIsImp0aSI6IjExMDE5MTcwNDEyZTlmZTVkYWRiNGU4Mjg4ZWY4Mjk4NjhiNjFmNjQifQ.mIhwQONbbDWKtVuRt8_sUWDRxZvxDh7R9MK3Eg0zt2CNzGcWM0aBhtZw_JSRwtiauNaMNnD543CZGYYs_fWoYpVKDTuTqPC4IYuaU7weUdPN_xpDn6n3PPCIxn3ujIiWpwYdwIfC30bTZhS7sEplV3DEZZTcUv-u3dQkWXGXBUj8kMztR9PNpV_uWKOsMTtKUkF6vbdaq9SBQlSM9Hei1x70SNafEgBer8sKfDHQSqFxlEalouCmuL5pXuLR9yQBb2f05H2v8UiO9Gh0tos0WNacSigL9lO0iWU83YMwTvofZ5_v_JCD6xjl4MGt5eiyB8MywzV_APxhchinxKqNFw"}
+
+<> 2021-10-10T152200.400.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"username":"sampleuser","password":"12345678"}
+
+<> 2021-10-10T114528.200.json
+
+###
+
+POST http://127.0.0.1:8000/api/token/obtain/
+Content-Type: application/json
+
+{"username":"sampleuser","password":"12345678"}
+
+<> 2021-10-10T114034.500.html
+
+###
+
+POST http://127.0.0.1:8000/api/user/create/
+Content-Type: application/json
+
+{"email":"sampleuser@sample.com","username":"sampleuser","password":"12345678"}
+
+<> 2021-10-08T142517.400.json
+
+###
+
+POST http://127.0.0.1:8000/api/user/create/
+Content-Type: application/json
+
+{"email":"sampleuser@sample.com","username":"sampleuser","password":"12345678"}
+
+<> 2021-10-08T142413.500.html
+
+###
+
+POST http://127.0.0.1:8000/api/user/create/
+Content-Type: application/json
+
+{"email":"sampleuser@sample.com","username":"sampleuser","password":"12345678"}
+
+<> 2021-10-08T142330.500.json
+
+###
+
+POST http://127.0.0.1:8000/api/user/create/
+Content-Type: application/json
+
+{"email":"sampleuser@sample.com","username":"sampleuser","password":"12345678"}
+
+<> 2021-10-08T142227.500.html
+
+###
+

@@ -1,14 +1,15 @@
+from django.contrib.auth.models import Permission
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from collects.models import Collect, Item
 from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ItemSerializerWithCover, \
     ItemSerializerWithImages
+from collectify.permissions import IsOwnerOrReadOnly
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = ()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -44,8 +45,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
 # explore drf-nested-routers
 class ItemViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = ()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':
