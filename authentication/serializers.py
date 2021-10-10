@@ -19,15 +19,15 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        if 'idToken' not in attrs:
+        if 'id_token' not in attrs:
             # Use login credentials
             return super().validate(attrs)
 
         # Verify token
-        print(attrs['idToken'])
+        print(attrs['id_token'])
         try:
             # Specify the CLIENT_ID of the app that accesses the backend:
-            idinfo = id_token.verify_oauth2_token(attrs['idToken'], requests.Request())
+            idinfo = id_token.verify_oauth2_token(attrs['id_token'], requests.Request())
             print(idinfo)
 
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
