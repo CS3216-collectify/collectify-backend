@@ -30,7 +30,7 @@ class CollectionSerializerWithImages(CollectionSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     image_id = serializers.ReadOnlyField(source='id')
-    image_url = serializers.URLField(read_only=True)
+    image_url = serializers.URLField(source='image_file.url', read_only=True)
     image_upload_date = serializers.DateTimeField(source='image_upload', read_only=True)
     class Meta:
         model = Image

@@ -14,10 +14,10 @@ def create_sample_data():
     c1.save()
     i1 = Item(item_name='test item 1', item_description='description', item_creation=timezone.now(), collection=c1)
     i1.save()
-    im1 = Image(image_url='www.example.org/image1', image_upload=timezone.now(), item=i1)
-    im1.save()
-    im2 = Image(image_url='www.example.org/image2', image_upload=timezone.now(), item=i1)
-    im2.save()
+    #im1 = Image(image_url='www.example.org/image1', image_upload=timezone.now(), item=i1)
+    #im1.save()
+    #im2 = Image(image_url='www.example.org/image2', image_upload=timezone.now(), item=i1)
+    #im2.save()
 
 
 def delete_all_data():

@@ -36,7 +36,7 @@ class Item(models.Model):
     def cover_image(self):
         images = self.images
         if images.exists():
-            return images.latest('image_upload').image_url
+            return images.latest('image_upload').image_file.url
         else:
             return None
     
@@ -45,7 +45,7 @@ class Item(models.Model):
 
 
 class Image(models.Model):
-    image_url = models.ImageField(upload_to='item_images')
+    image_file = models.ImageField(upload_to='item_images', null=True)
     image_upload = models.DateTimeField(auto_now_add=True)
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
 
@@ -53,4 +53,4 @@ class Image(models.Model):
         return self.item.collection.user
 
     def __str__(self):
-        return self.image_url
+        return self.item.item_name + ' image'
