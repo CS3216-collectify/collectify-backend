@@ -3,7 +3,7 @@ from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from collects.models import Collect, Item
-from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ItemSerializerWithCover, \
+from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ItemSerializer, ItemSerializerWithCover, \
     ItemSerializerWithImages
 from collectify.permissions import IsOwnerOrReadOnly
 
@@ -43,7 +43,6 @@ class CollectionViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# explore drf-nested-routers
 class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
@@ -57,14 +56,15 @@ class ItemViewSet(viewsets.ModelViewSet):
         queryset = Item.objects.all()
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
-        collect_pk = self.kwargs.get('collect_pk')
+        collection = self.kwargs.get('collections_pk')
 
-        if collect_pk:
-            queryset = Item.objects.filter(collect=collect_pk)
+        queryset = Item.objects.filter(collection__id=collection)
 
         if offset is not None and limit is not None:
             queryset = queryset[int(offset):int(offset) + int(limit)]
 
+        return queryset
+
     def update(self, request, *args, **kwargs):
-        super(CollectionViewSet, self).update(request, *args, **kwargs)
+        super(ItemViewSet, self).update(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -40,13 +40,6 @@ class Item(models.Model):
         else:
             return None
     
-    def all_images(self):
-        images = self.images.order_by('-image_upload')
-        if not images.exists():
-            return None
-        return None
-        #todo
-    
     def __str__(self):
         return self.item_name
 

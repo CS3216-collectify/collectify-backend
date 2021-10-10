@@ -7,6 +7,7 @@ django-cors-headers==3.10.0
 djangorestframework==3.12.4
 djangorestframework-camel-case==1.2.0
 djangorestframework-simplejwt==4.8.0
+drf-nested-routers==0.93.3
 google-auth==2.3.0
 idna==3.2
 psycopg2==2.9.1
