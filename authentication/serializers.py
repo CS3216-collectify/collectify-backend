@@ -19,7 +19,7 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        if not attrs['idToken']:
+        if 'idToken' not in attrs:
             # Use login credentials
             return super().validate(attrs)
 
