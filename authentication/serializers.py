@@ -19,6 +19,11 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # token['key_name'] = user.some_key
         return token
 
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['id'] = self.user.id
+        return data
+
 
 class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
 
@@ -75,7 +80,7 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
 
             # generate access token
             refresh = self.get_token(self.user)
-            data = {'refresh': str(refresh), 'access': str(refresh.access_token)}
+            data = {'refresh': str(refresh), 'access': str(refresh.access_token), 'id': self.user.id}
 
             if api_settings.UPDATE_LAST_LOGIN:
                 update_last_login(None, self.user)
