@@ -1,10 +1,14 @@
 from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from collectify.permissions import IsOwnerOrReadOnly
+from .authentication import JWTAuthenticationExcludeSafeMethods
 from .serializers import CollectifyTokenObtainPairSerializer, UserSerializer, \
     CollectifyTokenObtainPairSerializerUsingIdToken
+from .models import User
 
 
 class ObtainTokenPairWithAddedClaimsView(TokenObtainPairView):
@@ -34,3 +38,10 @@ class UserCreate(APIView):
 
         except APIException as err:
             return Response({"detail": err.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserInfo(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    authentication_classes = [JWTAuthenticationExcludeSafeMethods]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
