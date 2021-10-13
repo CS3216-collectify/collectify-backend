@@ -42,20 +42,26 @@ class ItemSerializer(serializers.ModelSerializer):
     item_name = serializers.CharField(max_length=30)
     item_description = serializers.CharField()
     item_creation_date = serializers.DateTimeField(source='item_creation', read_only=True)
+    owner_id = serializers.ReadOnlyField(source='collection.user.id')
+    owner_username = serializers.CharField(source='collection.user.username', read_only=True)
+    collection_name = serializers.CharField(source='collection.collection_name', read_only=True)
     class Meta:
         model = Item
-        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date']
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
+        'owner_username', 'collection_name']
 
 
 class ItemSerializerWithCover(ItemSerializer):
     cover_image = serializers.URLField(read_only=True)
     class Meta:
         model = Item
-        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'cover_image']
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
+        'owner_username', 'collection_name', 'cover_image']
 
 
 class ItemSerializerWithImages(ItemSerializer):
     images = ImageSerializer(many=True, read_only=True)
     class Meta:
         model = Item
-        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'images']
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
+        'owner_username', 'collection_name', 'images']
