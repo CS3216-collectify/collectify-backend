@@ -7,4 +7,4 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     # Add any properties here that is not already in the default django user.
     email = models.EmailField(unique=True)
-    picture = models.URLField(blank=True)
+    picture_file = models.ImageField(upload_to='profile_images', null=True, blank=True)

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from collectify.permissions import IsOwnerOrReadOnly
 from .authentication import JWTAuthenticationExcludeSafeMethods
 from .serializers import CollectifyTokenObtainPairSerializer, UserSerializer, \
-    CollectifyTokenObtainPairSerializerUsingIdToken
+    CollectifyTokenObtainPairSerializerUsingIdToken, UserProfileSerializer
 from .models import User
 
 
@@ -44,4 +44,4 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     authentication_classes = [JWTAuthenticationExcludeSafeMethods]
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserProfileSerializer

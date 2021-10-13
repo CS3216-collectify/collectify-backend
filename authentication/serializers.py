@@ -58,7 +58,7 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
 
             # Get email address and search database for user
             # If none then create a new user
-            if not idinfo['email'] or not idinfo['given_name'] or not idinfo['family_name'] or not idinfo['picture']:
+            if 'email' not in idinfo or 'given_name' not in idinfo or 'picture' not in idinfo:
                 raise ValueError('Requires email and profile scopes.')
 
             queryset = User.objects.filter(email=idinfo['email'])
@@ -71,9 +71,12 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                     idinfo['sub'],  # use google's userid as username for now.
                     email=idinfo['email'],
                     first_name=idinfo['given_name'],
-                    last_name=idinfo['family_name'],
-                    picture=idinfo['picture']
                 )
+                if 'family_name' in idinfo:
+                    self.user.last_name = idinfo['family_name'],
+
+                self.user.picture = idinfo['picture']
+                self.user.save()
 
             if len(queryset) == 1:
                 self.user = queryset[0]
@@ -120,3 +123,11 @@ class UserSerializer(serializers.ModelSerializer):
             return instance
         except Exception as err:
             raise exceptions.APIException(detail="User already exists", code=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileSerializer(UserSerializer):
+    picture_url = serializers.URLField(source='picture_file.url', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('user_id', 'email', 'username', 'first_name', 'last_name', 'picture_url')
