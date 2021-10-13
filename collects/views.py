@@ -3,8 +3,8 @@ from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods
-from collects.models import Collect, Item
-from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ItemSerializer, ItemSerializerWithCover, \
+from collects.models import Collect, Item, Image
+from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, ItemSerializer, ItemSerializerWithCover, \
     ItemSerializerWithImages
 from collectify.permissions import IsOwnerOrReadOnly
 
@@ -68,6 +68,19 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data) 
+
+        files = request.FILES.getlist('images')
+        for file in files:
+            image = Image(image_file=file, item=serializer.instance)
+            image.save()
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def perform_create(self, serializer):
         collection = self.kwargs.get('collections_pk')
         serializer.save(collection=Collect.objects.get(id=collection))
@@ -75,3 +88,8 @@ class ItemViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         super(ItemViewSet, self).update(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ImageViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()
