@@ -68,6 +68,10 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    def perform_create(self, serializer):
+        collection = self.kwargs.get('collections_pk')
+        serializer.save(collection=Collect.objects.get(id=collection))
+
     def update(self, request, *args, **kwargs):
         super(ItemViewSet, self).update(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
