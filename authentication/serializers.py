@@ -7,6 +7,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from urllib.request import urlopen
 
 
 class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -67,6 +70,10 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                 raise ValueError('Multiple emails found.')
 
             if len(queryset) == 0:
+                img_temp = NamedTemporaryFile()
+                img_temp.write(urlopen(idinfo['picture']).read())
+                img_temp.flush()
+
                 self.user = User.objects.create_user(
                     idinfo['sub'],  # use google's userid as username for now.
                     email=idinfo['email'],
@@ -75,7 +82,7 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                 if 'family_name' in idinfo:
                     self.user.last_name = idinfo['family_name'],
 
-                self.user.picture = idinfo['picture']
+                self.user.picture_file.save(idinfo['sub'], File(img_temp))
                 self.user.save()
 
             if len(queryset) == 1:
