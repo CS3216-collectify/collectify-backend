@@ -80,7 +80,7 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                     first_name=idinfo['given_name'],
                 )
                 if 'family_name' in idinfo:
-                    self.user.last_name = idinfo['family_name'],
+                    self.user.last_name = idinfo['family_name']
 
                 self.user.picture_file.save(idinfo['sub'], File(img_temp))
                 self.user.save()
