@@ -3,8 +3,8 @@ from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods
-from collects.models import Collect, Item
-from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ItemSerializer, ItemSerializerWithCover, \
+from collects.models import Collect, Item, Image
+from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, ItemSerializer, ItemSerializerWithCover, \
     ItemSerializerWithImages
 from collectify.permissions import IsOwnerOrReadOnly
 
@@ -68,6 +68,49 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data) 
+
+        files = request.FILES.getlist('images')
+        for file in files:
+            image = Image(image_file=file, item=serializer.instance)
+            image.save()
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        collection = self.kwargs.get('collections_pk')
+        serializer.save(collection=Collect.objects.get(id=collection))
+
+
     def update(self, request, *args, **kwargs):
-        super(ItemViewSet, self).update(request, *args, **kwargs)
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        
+        if request.data.get('deleted_image_ids'):
+            for image_id in request.data.get('deleted_image_ids'):
+                Image.objects.get(id=int(image_id)).delete()
+        
+        files = request.FILES.getlist('new_images')
+        for file in files:
+            image = Image(image_file=file, item=serializer.instance)
+            image.save()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class ImageViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()
