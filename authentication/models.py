@@ -8,3 +8,7 @@ class User(AbstractUser):
     # Add any properties here that is not already in the default django user.
     email = models.EmailField(unique=True)
     picture_file = models.ImageField(upload_to='profile_images', null=True, blank=True)
+
+    def picture_url(self):
+        if self.picture_file and hasattr(self.picture_file, 'url'):
+            return self.picture_file.url

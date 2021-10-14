@@ -133,7 +133,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(UserSerializer):
-    picture_url = serializers.URLField(source='picture_file.url', read_only=True)
+    picture_url = serializers.URLField(read_only=True, allow_null=True)
 
     class Meta:
         model = User
