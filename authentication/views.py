@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status, permissions, generics
@@ -45,3 +46,10 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthenticationExcludeSafeMethods]
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+    lookup_field = 'username'
+
+
+class UserInfoFromToken(APIView):
+    def get(self, request, format=None):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
