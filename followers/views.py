@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, exceptions
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods
@@ -30,7 +31,11 @@ class FollowerViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        try:
+            serializer.save(user=self.request.user)
+        except Exception as err:
+            print(err)
+            raise exceptions.ValidationError(detail=err, code=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)

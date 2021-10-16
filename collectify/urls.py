@@ -24,3 +24,7 @@ urlpatterns = [
     path('api/', include('authentication.urls')),
     path('followers/', include('followers.urls')),
 ]
+
+# Requires DEBUG = False in settings
+handler500 = 'rest_framework.exceptions.server_error'
+handler400 = 'rest_framework.exceptions.bad_request'
