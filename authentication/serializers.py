@@ -84,13 +84,15 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
 
                 self.user.picture_file.save(idinfo['sub'], File(img_temp))
                 self.user.save()
+                self.is_new = True
 
             if len(queryset) == 1:
                 self.user = queryset[0]
+                self.is_new = False
 
             # generate access token
             refresh = self.get_token(self.user)
-            data = {'refresh': str(refresh), 'access': str(refresh.access_token), 'id': self.user.id}
+            data = {'refresh': str(refresh), 'access': str(refresh.access_token), 'id': self.user.id, 'is_new': self.is_new}
 
             if api_settings.UPDATE_LAST_LOGIN:
                 update_last_login(None, self.user)
