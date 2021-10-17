@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from . import secrets
+from . import collectifysecrets
 from datetime import timedelta
 import os
 
@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secrets.SECRET_KEY
+SECRET_KEY = collectifysecrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,8 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['collectify-backend-dev.ap-southeast-1.elasticbeanstalk.com', '127.0.0.1']
 
 # AWS S3
-AWS_ACCESS_KEY_ID = secrets.AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY = secrets.AWS_SECRET_ACCESS_KEY
+AWS_ACCESS_KEY_ID = collectifysecrets.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = collectifysecrets.AWS_SECRET_ACCESS_KEY
 AWS_STORAGE_BUCKET_NAME = 'collectify-images'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'ap-southeast-1'

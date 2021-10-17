@@ -1,5 +1,5 @@
 # collectify stuff
-/collectify/secrets.py
+/collectify/collectifysecrets.py
 /collectify/db_info.py
 migrations/
 management/
