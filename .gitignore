@@ -2,6 +2,7 @@
 /collectify/secrets.py
 /collectify/db_info.py
 migrations/
+management/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
