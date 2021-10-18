@@ -207,3 +207,5 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8100'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
