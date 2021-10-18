@@ -27,7 +27,7 @@ SECRET_KEY = collectifysecrets.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.elasticbeanstalk.com', '127.0.0.1', '172.31.17.192', 'collectify.link']
+ALLOWED_HOSTS = ['.elasticbeanstalk.com', '127.0.0.1', '172.31.17.192', 'collectify.link', '46.137.226.252', '54.254.69.227 ']
 
 # AWS S3
 AWS_ACCESS_KEY_ID = collectifysecrets.AWS_ACCESS_KEY_ID
