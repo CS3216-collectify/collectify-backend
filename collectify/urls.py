@@ -23,6 +23,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('api/', include('authentication.urls')),
     path('followers/', include('followers.urls')),
+    path('', include('landing.urls')),
 ]
 
 # Requires DEBUG = False in settings
