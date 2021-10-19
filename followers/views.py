@@ -1,8 +1,4 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import viewsets, permissions, status, exceptions
-from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods

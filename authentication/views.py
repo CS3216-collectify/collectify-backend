@@ -1,15 +1,15 @@
-from django.http import Http404
-from rest_framework.exceptions import APIException
-from rest_framework_simplejwt.views import TokenObtainPairView
+from django.db.models import Q
 from rest_framework import status, permissions, generics
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from collectify.permissions import IsOwnerOrReadOnly
 from .authentication import JWTAuthenticationExcludeSafeMethods
+from .models import User
 from .serializers import CollectifyTokenObtainPairSerializer, UserSerializer, \
     CollectifyTokenObtainPairSerializerUsingIdToken, UserProfileSerializer
-from .models import User
 
 
 class ObtainTokenPairWithAddedClaimsView(TokenObtainPairView):
@@ -53,3 +53,30 @@ class UserInfoFromToken(APIView):
     def get(self, request, format=None):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data)
+
+
+class UserInfoSearch(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        keywords = self.request.query_params.get('keywords')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+
+        if keywords is not None:
+            queryset = User.objects.filter(
+                Q(username__istartswith=keywords)
+                | Q(first_name__istartswith=keywords)
+                | Q(last_name__istartswith=keywords)
+            )
+
+        else:
+            queryset = User.objects.all()
+
+        if offset is not None and limit is not None:
+            queryset = queryset[int(offset):int(offset) + int(limit)]
+
+        print(queryset)
+        return queryset

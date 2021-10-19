@@ -1,7 +1,7 @@
 # collectify stuff
 /collectify/collectifysecrets.py
 /collectify/db_info.py
-migrations/
+*/migrations/????_*.py
 management/
 
 # Byte-compiled / optimized / DLL files

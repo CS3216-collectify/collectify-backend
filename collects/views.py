@@ -4,8 +4,8 @@ from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods
 from collects.models import Collect, Item, Image
-from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, ItemSerializer, ItemSerializerWithCover, \
-    ItemSerializerWithImages
+from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, \
+    ItemSerializerWithCover, ItemSerializerWithImages
 from collectify.permissions import IsOwnerOrReadOnly
 
 
@@ -56,7 +56,6 @@ class ItemViewSet(viewsets.ModelViewSet):
             return ItemSerializerWithImages
 
     def get_queryset(self):
-        queryset = Item.objects.all()
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
         collection = self.kwargs.get('collections_pk')
@@ -67,7 +66,6 @@ class ItemViewSet(viewsets.ModelViewSet):
             queryset = queryset[int(offset):int(offset) + int(limit)]
 
         return queryset
-
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -85,7 +83,6 @@ class ItemViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         collection = self.kwargs.get('collections_pk')
         serializer.save(collection=Collect.objects.get(id=collection))
-
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

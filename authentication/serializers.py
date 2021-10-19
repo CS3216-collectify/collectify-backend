@@ -92,7 +92,12 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
 
             # generate access token
             refresh = self.get_token(self.user)
-            data = {'refresh': str(refresh), 'access': str(refresh.access_token), 'id': self.user.id, 'is_new': self.is_new}
+            data = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'id': self.user.id,
+                'is_new': self.is_new
+            }
 
             if api_settings.UPDATE_LAST_LOGIN:
                 update_last_login(None, self.user)
@@ -113,7 +118,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True
     )
-    username = serializers.CharField()
+    username = serializers.CharField(min_length=8)
     password = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
