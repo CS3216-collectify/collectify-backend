@@ -1,8 +1,11 @@
 from django.contrib.auth.models import Permission
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.db.models import Value
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods
+from authentication.models import User
 from collects.models import Collect, Item, Image
 from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, \
     ItemSerializerWithCover, ItemSerializerWithImages
@@ -25,6 +28,14 @@ class CollectionViewSet(viewsets.ModelViewSet):
         category = self.request.query_params.get('category')
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
+        keywords = self.request.query_params.get('keywords')
+
+        if keywords is not None:
+            vector = SearchVector('collection_name', weight='A') \
+                     + SearchVector('collection_description', weight='B')
+            query = SearchQuery(keywords)
+            rank = SearchRank(vector, query, normalization=Value(1), cover_density=True)
+            queryset = queryset.annotate(rank=rank).filter(rank__gte=0.1).order_by('-rank')
 
         if user is not None:
             queryset = queryset.filter(user__id=user)

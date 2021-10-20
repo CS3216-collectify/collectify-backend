@@ -1,6 +1,6 @@
 from django.db.models import Q
 from rest_framework import status, permissions, generics, exceptions
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -52,6 +52,9 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
         try:
             super().update(request, *args, **kwargs)
             return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValidationError as err:
+            print(err)
+            raise err
         except Exception as err:
             print(err)
             raise exceptions.ValidationError(detail="The value entered cannot be used.",

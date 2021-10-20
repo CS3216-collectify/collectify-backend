@@ -141,6 +141,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(UserSerializer):
     picture_url = serializers.URLField(read_only=True, allow_null=True)
+    username = serializers.CharField(min_length=8)
 
     class Meta:
         model = User
