@@ -1,5 +1,7 @@
 from rest_framework import permissions
 
+from authentication.models import User
+
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -17,5 +19,9 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             print(request.user)
             return obj.user == request.user
 
+        if isinstance(obj, User):
+            return obj == request.user
+
         print("checked auth")
+        # For apis that are not owned by anyone
         return True
