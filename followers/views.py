@@ -31,7 +31,9 @@ class FollowerViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user)
         except Exception as err:
             print(err)
-            raise exceptions.ValidationError(detail=err, code=status.HTTP_400_BAD_REQUEST)
+            raise exceptions.ValidationError(
+                detail="Invalid. Please ensure that you are not already following the same collection",
+                code=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)

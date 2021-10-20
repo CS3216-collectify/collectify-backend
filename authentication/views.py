@@ -1,5 +1,5 @@
 from django.db.models import Q
-from rest_framework import status, permissions, generics
+from rest_framework import status, permissions, generics, exceptions
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -47,6 +47,16 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     lookup_field = 'username'
+
+    def update(self, request, *args, **kwargs):
+        try:
+            super().update(request, *args, **kwargs)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as err:
+            print(err)
+            raise exceptions.ValidationError(detail="The value entered cannot be used.",
+                                             code=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserInfoFromToken(APIView):
