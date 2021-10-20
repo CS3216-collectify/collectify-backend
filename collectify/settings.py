@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'authentication',
     'followers',
     'landing',
+    'likes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
