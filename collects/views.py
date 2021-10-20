@@ -107,9 +107,12 @@ class ItemViewSet(viewsets.ModelViewSet):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
         
-        if request.data.get('deleted_image_ids'):
-            for image_id in request.data.get('deleted_image_ids'):
-                Image.objects.get(id=int(image_id)).delete()
+        if not request.data:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        deleted_images = request.data.getlist('deleted_image_ids')
+        for image_id in deleted_images:
+            Image.objects.get(id=image_id).delete()
         
         files = request.FILES.getlist('new_images')
         for file in files:
