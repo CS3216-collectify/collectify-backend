@@ -7,9 +7,10 @@ from authentication.authentication import JWTAuthenticationExcludeSafeMethods, \
     JWTAuthenticationWithoutErrorForSafeMethods
 from collectify.permissions import IsOwnerOrReadOnly
 from collects.models import Collect, Item, Image
-from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, \
+from collects.serializers import CollectionSerializer, CollectionSerializerWithCovers, ImageSerializer, \
     ItemSerializerWithCover, ItemSerializerWithImages
 from followers.models import Followers
+from likes.models import Like
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -18,7 +19,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return CollectionSerializerWithImages
+            return CollectionSerializerWithCovers
         else:
             return CollectionSerializer
 
@@ -69,17 +70,28 @@ class CollectionViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         response = super(CollectionViewSet, self).retrieve(request, *args, **kwargs)
 
-        if self.request.user and self.request.user.is_authenticated:
-            if self.get_object().followers.filter(user=self.request.user).exists():
-                response.data['is_followed'] = True
+        if self.request.user and self.request.user.is_authenticated and self.get_object().followers.filter(user=self.request.user).exists():
+            response.data['is_followed'] = True
+        else:
+            response.data['is_followed'] = False
+        return response
+    
+    def list(self, request, *args, **kwargs):
+        response = super(CollectionViewSet, self).list(request, *args, **kwargs)
+
+        for response_collection in response.data:
+            if self.request.user and self.request.user.is_authenticated and \
+                    Followers.objects.filter(user=self.request.user).filter(collection=response_collection['collection_id']).exists():
+                response_collection['is_followed'] = True
             else:
-                response.data['is_followed'] = False
+                response_collection['is_followed'] = False
+        
         return response
 
 
 class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    authentication_classes = [JWTAuthenticationExcludeSafeMethods]
+    authentication_classes = [JWTAuthenticationWithoutErrorForSafeMethods]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -141,6 +153,16 @@ class ItemViewSet(viewsets.ModelViewSet):
             image.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def retrieve(self, request, *args, **kwargs):
+        response = super(ItemViewSet, self).retrieve(request, *args, **kwargs)
+
+        if self.request.user and self.request.user.is_authenticated and self.get_object().like.filter(user=self.request.user).exists():
+            response.data['is_liked'] = True
+        else:
+            response.data['is_liked'] = False
+        
+        return response
 
 
 class ImageViewSet(viewsets.ModelViewSet):

@@ -57,3 +57,19 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
             queryset = queryset[int(offset):int(offset) + int(limit)]
 
         return queryset
+    
+    def list(self, request, *args, **kwargs):
+        response = super(ItemSearchViewSet, self).list(request, *args, **kwargs)
+        
+        is_detailed = self.request.query_params.get('detailed')
+        if not is_detailed or is_detailed.lower() != 'true':
+            return response
+
+        for response_item in response.data:
+            if self.request.user and self.request.user.is_authenticated and \
+                    Like.objects.filter(user=self.request.user).filter(item=response_item['item_id']).exists():
+                response_item['is_liked'] = True
+            else:
+                response_item['is_liked'] = False
+            
+        return response
