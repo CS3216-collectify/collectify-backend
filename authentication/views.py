@@ -60,7 +60,7 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
             print(err)
             if "unique constraint \"authentication_user_username_key\"" in str(err):
                 raise exceptions.ValidationError(detail="The username has already been taken.",
-                                             code=status.HTTP_400_BAD_REQUEST)
+                                                 code=status.HTTP_400_BAD_REQUEST)
 
 
 class UserInfoFromToken(APIView):

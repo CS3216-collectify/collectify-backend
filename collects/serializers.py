@@ -30,7 +30,7 @@ class CollectionSerializerWithImages(CollectionSerializer):
     class Meta:
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
-                  'owner_id', 'category_id', 'category_name', 'cover_images')
+                  'owner_id', 'owner_username', 'category_id', 'category_name', 'followers_count', 'cover_images')
 
 
 class ImageSerializer(serializers.ModelSerializer):

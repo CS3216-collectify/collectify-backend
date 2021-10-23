@@ -1,3 +1,4 @@
+import items as items
 from django.db import models
 from categories.models import Category
 from authentication.models import User
@@ -15,7 +16,7 @@ class Collect(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='collects', on_delete=models.CASCADE)
 
     def cover_images(self):
         return [i.cover_image() for i in self.items.order_by('-item_creation')[:3] if i.cover_image()]

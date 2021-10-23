@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Sum, Count
+import functools
 
 
-# This model behaves identically to the default user model, but you’ll be able to customize
-# it in the future if the need arises.
 class User(AbstractUser):
     # Add any properties here that is not already in the default django user.
     email = models.EmailField(unique=True)
@@ -13,3 +13,8 @@ class User(AbstractUser):
     def picture_url(self):
         if self.picture_file and hasattr(self.picture_file, 'url'):
             return self.picture_file.url
+
+    def items_count(self):
+        # return Item.objects.filter(collection__in=Subquery(Collect.objects.filter(user=self)))
+        collects = self.collects.annotate(Count('items'))
+        return functools.reduce(lambda a, b: a + b.items__count, collects, 0)
