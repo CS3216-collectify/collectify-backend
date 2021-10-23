@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from categories.models import Category
 from collects.models import Collect, Item, Image
+from likes.models import Like
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -63,8 +64,14 @@ class ItemSerializerWithCover(ItemSerializer):
 
 
 class ItemSerializerWithImages(ItemSerializer):
+    is_liked = serializers.SerializerMethodField(read_only=True)
+    likes_count = serializers.IntegerField(source='like_set.count', read_only=True)
     images = ImageSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Item
         fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name', 'images']
+        'owner_username', 'collection_id', 'collection_name', 'is_liked', 'likes_count', 'images']
+    
+    def get_is_liked(self, obj):
+        return Like.objects.filter(item=obj).filter(user=obj.collection.user).exists()
