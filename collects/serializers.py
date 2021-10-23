@@ -10,7 +10,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     collection_name = serializers.CharField(max_length=30)
     collection_description = serializers.CharField(max_length=150)
     collection_creation_date = serializers.DateTimeField(source='collection_creation', read_only=True)
-    user_id = serializers.ReadOnlyField(source='user.id')
+    owner_id = serializers.ReadOnlyField(source='user.id')
     category_id = serializers.PrimaryKeyRelatedField(allow_null=True,
                                                      queryset=Category.objects.all(),
                                                      source='category')
@@ -21,7 +21,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
-                  'user_id', 'category_id', 'category_name', 'followers_count', 'owner_username')
+                  'owner_id', 'category_id', 'category_name', 'followers_count', 'owner_username')
 
 
 class CollectionSerializerWithImages(CollectionSerializer):
@@ -30,7 +30,7 @@ class CollectionSerializerWithImages(CollectionSerializer):
     class Meta:
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
-                  'user_id', 'category_id', 'category_name', 'cover_images')
+                  'owner_id', 'category_id', 'category_name', 'cover_images')
 
 
 class ImageSerializer(serializers.ModelSerializer):
