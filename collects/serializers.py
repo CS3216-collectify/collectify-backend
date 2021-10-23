@@ -16,11 +16,12 @@ class CollectionSerializer(serializers.ModelSerializer):
                                                      source='category')
     category_name = serializers.ReadOnlyField(read_only=True, source='category.category_name')
     followers_count = serializers.ReadOnlyField(read_only=True, source='followers.count')
+    owner_username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
-                  'user_id', 'category_id', 'category_name', "followers_count")
+                  'user_id', 'category_id', 'category_name', 'followers_count', 'owner_username')
 
 
 class CollectionSerializerWithImages(CollectionSerializer):
