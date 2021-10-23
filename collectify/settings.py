@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'users',
     'authentication',
     'followers',
+    'likes',
     'landing',
     'django.contrib.admin',
     'django.contrib.auth',

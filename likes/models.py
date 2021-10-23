@@ -3,7 +3,7 @@ from authentication.models import User
 from collects.models import Item
 
 
-class Followers(models.Model):
+class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
