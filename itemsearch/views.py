@@ -35,19 +35,19 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
         if self.request.user and self.request.user.is_authenticated:
             if is_followed and is_followed.lower() == "true":
                 queryset = queryset.filter(
-                    Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
+                    Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('collection_id')))
                 )
             elif is_followed and is_followed.lower() == "false":
                 queryset = queryset.filter(
-                    ~Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
+                    ~Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('collection_id')))
                 )
             if is_liked and is_liked.lower() == "true":
                 queryset = queryset.filter(
-                    Exists(Like.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
+                    Exists(Like.objects.filter(user=self.request.user, item__id=OuterRef('id')))
                 )
             elif is_liked and is_liked.lower() == "false":
                 queryset = queryset.filter(
-                    ~Exists(Like.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
+                    ~Exists(Like.objects.filter(user=self.request.user, item__id=OuterRef('id')))
                 )
 
         if offset is not None and limit is not None:
