@@ -61,7 +61,6 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
                                              code=status.HTTP_400_BAD_REQUEST)
 
 
-
 class UserInfoFromToken(APIView):
     def get(self, request, format=None):
         serializer = UserProfileSerializer(request.user)

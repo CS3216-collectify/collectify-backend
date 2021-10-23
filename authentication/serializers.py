@@ -1,15 +1,16 @@
+from urllib.request import urlopen
+
 from django.contrib.auth.models import update_last_login
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from google.auth.transport import requests
+from google.oauth2 import id_token
 from rest_framework import serializers, exceptions, status
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
-from urllib.request import urlopen
 
 
 class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -29,7 +30,6 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
-
     default_error_messages = {
         'Invalid_id_token': 'Invalid id token.'
     }
@@ -142,7 +142,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(UserSerializer):
     picture_url = serializers.URLField(read_only=True, allow_null=True)
     username = serializers.CharField(min_length=8)
+    description = serializers.CharField(max_length=500)
 
     class Meta:
         model = User
-        fields = ('user_id', 'email', 'username', 'first_name', 'last_name', 'picture_url')
+        fields = ('user_id', 'email', 'username', 'first_name', 'last_name', 'picture_url', 'description')
