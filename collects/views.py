@@ -44,7 +44,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
         if category is not None:
             queryset = queryset.filter(category_id__id=category)
 
-        if self.request.user and self.request.user.is_authenticated:
+        if is_followed and self.request.user and self.request.user.is_authenticated:
             if is_followed.lower() == "true":
                 queryset = queryset.filter(
                     Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))

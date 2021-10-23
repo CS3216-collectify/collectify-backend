@@ -33,19 +33,19 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
             queryset = queryset.annotate(rank=rank).filter(rank__gte=0.1).order_by('-rank')
 
         if self.request.user and self.request.user.is_authenticated:
-            if is_followed.lower() == "true":
+            if is_followed and is_followed.lower() == "true":
                 queryset = queryset.filter(
                     Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
                 )
-            elif is_followed.lower() == "false":
+            elif is_followed and is_followed.lower() == "false":
                 queryset = queryset.filter(
                     ~Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
                 )
-            if is_liked.lower() == "true":
+            if is_liked and is_liked.lower() == "true":
                 queryset = queryset.filter(
                     Exists(Like.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
                 )
-            elif is_liked.lower() == "false":
+            elif is_liked and is_liked.lower() == "false":
                 queryset = queryset.filter(
                     ~Exists(Like.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
                 )
