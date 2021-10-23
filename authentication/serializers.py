@@ -143,7 +143,8 @@ class UserProfileSerializer(UserSerializer):
     picture_url = serializers.URLField(read_only=True, allow_null=True)
     username = serializers.CharField(min_length=8)
     description = serializers.CharField(max_length=500)
+    likes_count = serializers.IntegerField(source='like_set.count', read_only=True)
 
     class Meta:
         model = User
-        fields = ('user_id', 'email', 'username', 'first_name', 'last_name', 'picture_url', 'description')
+        fields = ('user_id', 'email', 'username', 'first_name', 'last_name', 'picture_url', 'description', 'likes_count')

@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/', include('authentication.urls')),
     path('followers/', include('followers.urls')),
     path('', include('landing.urls')),
+    path('likes/', include('likes.urls')),
+    path('items/', include('itemsearch.urls'))
 ]
 
 # Requires DEBUG = False in settings
