@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.db.models import Q
 from rest_framework import status, permissions, generics, exceptions
 from rest_framework.exceptions import APIException, ValidationError
@@ -55,9 +56,10 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
         except ValidationError as err:
             print(err)
             raise err
-        except Exception as err:
+        except IntegrityError as err:
             print(err)
-            raise exceptions.ValidationError(detail="The value entered cannot be used.",
+            if "unique constraint \"authentication_user_username_key\"" in str(err):
+                raise exceptions.ValidationError(detail="The username has already been taken.",
                                              code=status.HTTP_400_BAD_REQUEST)
 
 
