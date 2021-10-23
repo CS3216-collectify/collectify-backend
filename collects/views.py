@@ -1,14 +1,15 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.db.models import Value
+from django.db.models import Value, Exists, OuterRef
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationExcludeSafeMethods, \
     JWTAuthenticationWithoutErrorForSafeMethods
+from collectify.permissions import IsOwnerOrReadOnly
 from collects.models import Collect, Item, Image
 from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, \
     ItemSerializerWithCover, ItemSerializerWithImages
-from collectify.permissions import IsOwnerOrReadOnly
+from followers.models import Followers
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -28,6 +29,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
         keywords = self.request.query_params.get('keywords')
+        is_followed = self.request.query_params.get('followed')
 
         if keywords is not None:
             vector = SearchVector('collection_name', weight='A') \
@@ -41,6 +43,16 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
         if category is not None:
             queryset = queryset.filter(category_id__id=category)
+
+        if self.request.user and self.request.user.is_authenticated:
+            if is_followed.lower() == "true":
+                queryset = queryset.filter(
+                    Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
+                )
+            elif is_followed.lower() == "false":
+                queryset = queryset.filter(
+                    ~Exists(Followers.objects.filter(user=self.request.user, collection__id=OuterRef('id')))
+                )
 
         if offset is not None and limit is not None:
             queryset = queryset[int(offset):int(offset) + int(limit)]
@@ -91,13 +103,13 @@ class ItemViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data) 
+        headers = self.get_success_headers(serializer.data)
 
         files = request.FILES.getlist('images')
         for file in files:
             image = Image(image_file=file, item=serializer.instance)
             image.save()
-        
+
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
@@ -115,21 +127,21 @@ class ItemViewSet(viewsets.ModelViewSet):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-        
+
         if not request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         deleted_images = request.data.getlist('deleted_image_ids')
         for image_id in deleted_images:
             Image.objects.get(id=image_id).delete()
-        
+
         files = request.FILES.getlist('new_images')
         for file in files:
             image = Image(image_file=file, item=serializer.instance)
             image.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
 
 class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
