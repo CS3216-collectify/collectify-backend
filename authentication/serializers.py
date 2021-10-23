@@ -74,8 +74,10 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                 img_temp.write(urlopen(idinfo['picture']).read())
                 img_temp.flush()
 
+                temp_username = idinfo['given_name'] + idinfo['family_name'] + idinfo['sub'][-8:]
+
                 self.user = User.objects.create_user(
-                    idinfo['sub'],  # use google's userid as username for now.
+                    temp_username,
                     email=idinfo['email'],
                     first_name=idinfo['given_name'],
                 )
