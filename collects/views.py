@@ -1,11 +1,10 @@
-from django.contrib.auth.models import Permission
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Value
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
-from authentication.authentication import JWTAuthenticationExcludeSafeMethods
-from authentication.models import User
+from authentication.authentication import JWTAuthenticationExcludeSafeMethods, \
+    JWTAuthenticationWithoutErrorForSafeMethods
 from collects.models import Collect, Item, Image
 from collects.serializers import CollectionSerializer, CollectionSerializerWithImages, ImageSerializer, \
     ItemSerializerWithCover, ItemSerializerWithImages
@@ -14,7 +13,7 @@ from collectify.permissions import IsOwnerOrReadOnly
 
 class CollectionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    authentication_classes = [JWTAuthenticationExcludeSafeMethods]
+    authentication_classes = [JWTAuthenticationWithoutErrorForSafeMethods]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -54,6 +53,16 @@ class CollectionViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         super(CollectionViewSet, self).update(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def retrieve(self, request, *args, **kwargs):
+        response = super(CollectionViewSet, self).retrieve(request, *args, **kwargs)
+
+        if self.request.user and self.request.user.is_authenticated:
+            if self.get_object().followers.filter(user=self.request.user).exists():
+                response.data['is_followed'] = True
+            else:
+                response.data['is_followed'] = False
+        return response
 
 
 class ItemViewSet(viewsets.ModelViewSet):
