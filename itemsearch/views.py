@@ -5,7 +5,7 @@ from rest_framework import viewsets, permissions
 from authentication.authentication import JWTAuthenticationWithoutErrorForSafeMethods
 from collectify.permissions import IsOwnerOrReadOnly
 from collects.models import Item
-from collects.serializers import ItemSerializerWithCover
+from collects.serializers import ItemSerializerWithCover, ItemSerializerWithImages
 from followers.models import Followers
 from likes.models import Like
 
@@ -15,6 +15,9 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthenticationWithoutErrorForSafeMethods]
 
     def get_serializer_class(self):
+        is_detailed = self.request.query_params.get('detailed')
+        if is_detailed and is_detailed.lower() == 'true':
+            return ItemSerializerWithImages
         return ItemSerializerWithCover
 
     def get_queryset(self):
