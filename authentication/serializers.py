@@ -144,7 +144,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(UserSerializer):
     picture_url = serializers.URLField(read_only=True, allow_null=True)
     username = serializers.CharField(min_length=8)
-    description = serializers.CharField(max_length=500)
+    description = serializers.CharField(max_length=500, allow_blank=True)
     likes_count = serializers.IntegerField(source='like_set.count', read_only=True)
     collections_count = serializers.IntegerField(source='collects.count', read_only=True)
     items_count = serializers.IntegerField(read_only=True)
