@@ -68,6 +68,18 @@ class UserInfoFromToken(APIView):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data)
 
+    def patch(self, request, format=None):
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        if getattr(request.user, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            request.user._prefetched_objects_cache = {}
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class UserInfoSearch(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
