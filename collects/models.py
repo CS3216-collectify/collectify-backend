@@ -1,4 +1,3 @@
-import items as items
 from django.db import models
 from categories.models import Category
 from authentication.models import User
