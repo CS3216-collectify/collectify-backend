@@ -148,6 +148,7 @@ class UserProfileSerializer(UserSerializer):
     likes_count = serializers.IntegerField(source='like_set.count', read_only=True)
     collections_count = serializers.IntegerField(source='collects.count', read_only=True)
     items_count = serializers.IntegerField(read_only=True)
+    email = serializers.ReadOnlyField()
 
     class Meta:
         model = User
