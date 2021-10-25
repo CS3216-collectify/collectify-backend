@@ -18,3 +18,14 @@ class User(AbstractUser):
         # return Item.objects.filter(collection__in=Subquery(Collect.objects.filter(user=self)))
         collects = self.collects.annotate(Count('items'))
         return functools.reduce(lambda a, b: a + b.items__count, collects, 0)
+    
+    def likes_count(self):
+        #return Like.objects.filter(item__collection__user=self).count()
+
+        total_likes = 0
+        for collect in self.collects.all():
+            for item in collect.items.all():
+                total_likes += item.like.count()
+
+        return total_likes
+

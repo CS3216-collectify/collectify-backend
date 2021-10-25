@@ -145,7 +145,7 @@ class UserProfileSerializer(UserSerializer):
     picture_url = serializers.ImageField(allow_empty_file=True, allow_null=True, use_url=True)
     username = serializers.CharField(min_length=8)
     description = serializers.CharField(max_length=500, allow_blank=True)
-    likes_count = serializers.IntegerField(source='like_set.count', read_only=True)
+    likes_count = serializers.IntegerField(read_only=True)
     collections_count = serializers.IntegerField(source='collects.count', read_only=True)
     items_count = serializers.IntegerField(read_only=True)
     email = serializers.ReadOnlyField()
