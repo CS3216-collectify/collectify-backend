@@ -74,7 +74,7 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                 img_temp.write(urlopen(idinfo['picture']).read())
                 img_temp.flush()
 
-                temp_username = idinfo['given_name'] + idinfo['sub'][-8:]
+                temp_username = idinfo['given_name'].replace(" ", "") + idinfo['sub'][-8:]
 
                 self.user = User.objects.create_user(
                     temp_username,
