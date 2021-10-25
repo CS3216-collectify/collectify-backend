@@ -23,6 +23,9 @@ class Collect(models.Model):
     def __str__(self):
         return self.collection_name
 
+    class Meta:
+        ordering = ["-collection_creation"]
+
 
 class Item(models.Model):
     item_name = models.CharField(max_length=30)
@@ -36,12 +39,15 @@ class Item(models.Model):
     def cover_image(self):
         images = self.images
         if images.exists():
-            return images.latest('image_upload').image_file.url
+            return images.earliest('image_upload').image_file.url
         else:
             return None
     
     def __str__(self):
         return self.item_name
+    
+    class Meta:
+        ordering = ['-item_creation']
 
 
 class Image(models.Model):
@@ -54,3 +60,6 @@ class Image(models.Model):
 
     def __str__(self):
         return self.item.item_name + ' image'
+
+    class Meta:
+        ordering = ['image_upload']
