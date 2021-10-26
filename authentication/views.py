@@ -59,7 +59,7 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
         except IntegrityError as err:
             print(err)
             if "unique constraint \"authentication_user_username_key\"" in str(err):
-                raise exceptions.ValidationError(detail="The username has already been taken.",
+                raise exceptions.ValidationError(detail={"username": ["The username has already been taken."]},
                                                  code=status.HTTP_400_BAD_REQUEST)
 
 
@@ -71,14 +71,19 @@ class UserInfoFromToken(APIView):
     def patch(self, request, format=None):
         serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        try:
+            serializer.save()
+            if getattr(request.user, '_prefetched_objects_cache', None):
+                # If 'prefetch_related' has been applied to a queryset, we need to
+                # forcibly invalidate the prefetch cache on the instance.
+                request.user._prefetched_objects_cache = {}
 
-        if getattr(request.user, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            request.user._prefetched_objects_cache = {}
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except IntegrityError as err:
+            print(err)
+            if "unique constraint \"authentication_user_username_key\"" in str(err):
+                raise exceptions.ValidationError(detail={"username": ["The username has already been taken."]},
+                                                 code=status.HTTP_400_BAD_REQUEST)
 
 
 class UserInfoSearch(generics.ListAPIView):
