@@ -14,4 +14,4 @@ class Followers(models.Model):
         unique_together = ('user', 'collection',)
 
     def __str__(self):
-        return f'{self.user.id} following {self.collection.id}'
+        return f'{self.user.username} following {self.collection.collection_name}'
