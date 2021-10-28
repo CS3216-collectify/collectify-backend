@@ -1,5 +1,6 @@
 from django.urls import path
+from .views import ChatAuth
 
 urlpatterns = [
-    path('', chat_auth, name='chat_auth'),
+    path('', ChatAuth.as_view(), name='chat_auth'),
 ]
