@@ -52,10 +52,11 @@ class ItemSerializer(serializers.ModelSerializer):
     owner_username = serializers.CharField(source='collection.user.username', read_only=True)
     collection_id = serializers.ReadOnlyField(source='collection.id')
     collection_name = serializers.CharField(source='collection.collection_name', read_only=True)
+
     class Meta:
         model = Item
         fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name']
+        'owner_username', 'collection_id', 'collection_name', 'is_tradable']
 
 
 class ItemSerializerWithCover(ItemSerializer):
@@ -63,7 +64,7 @@ class ItemSerializerWithCover(ItemSerializer):
     class Meta:
         model = Item
         fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name', 'cover_image']
+        'owner_username', 'collection_id', 'collection_name', 'cover_image', 'is_tradable']
 
 
 class ItemSerializerWithImages(ItemSerializer):
@@ -73,5 +74,5 @@ class ItemSerializerWithImages(ItemSerializer):
     class Meta:
         model = Item
         fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name', 'likes_count', 'images']
+        'owner_username', 'collection_id', 'collection_name', 'likes_count', 'images', 'is_tradable']
 

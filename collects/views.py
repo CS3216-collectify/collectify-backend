@@ -1,5 +1,6 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Value, Exists, OuterRef
+from django.http import QueryDict
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
@@ -143,7 +144,15 @@ class ItemViewSet(viewsets.ModelViewSet):
         if not request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        deleted_images = request.data.getlist('deleted_image_ids')
+        deleted_images = []
+
+        # Request data is querydict if it is using multipart form but is dict if json. The check below will help
+        # prevent 500 errors
+        if isinstance(request.data, QueryDict):
+            deleted_images = request.data.getlist('deleted_image_ids')
+        elif 'deleted_image_ids' in request.data:
+            deleted_images = request.data['deleted_image_ids']
+
         for image_id in deleted_images:
             Image.objects.get(id=image_id).delete()
 

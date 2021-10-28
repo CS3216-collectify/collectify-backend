@@ -32,6 +32,7 @@ class Item(models.Model):
     item_description = models.TextField(blank=True)
     item_creation = models.DateTimeField(auto_now_add=True)
     collection = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
+    is_tradable = models.BooleanField(default=False)
 
     def user(self):
         return self.collection.user
