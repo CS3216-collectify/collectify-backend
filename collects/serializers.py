@@ -8,7 +8,7 @@ from likes.models import Like
 class CollectionSerializer(serializers.ModelSerializer):
     collection_id = serializers.ReadOnlyField(source='id')
     collection_name = serializers.CharField(max_length=30)
-    collection_description = serializers.CharField(max_length=150)
+    collection_description = serializers.CharField(max_length=150, allow_blank=True)
     collection_creation_date = serializers.DateTimeField(source='collection_creation', read_only=True)
     owner_id = serializers.ReadOnlyField(source='user.id')
     owner_username = serializers.CharField(source='user.username', read_only=True)
@@ -46,7 +46,7 @@ class ImageSerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     item_id = serializers.ReadOnlyField(source='id')
     item_name = serializers.CharField(max_length=30)
-    item_description = serializers.CharField()
+    item_description = serializers.CharField(allow_blank=True)
     item_creation_date = serializers.DateTimeField(source='item_creation', read_only=True)
     owner_id = serializers.ReadOnlyField(source='collection.user.id')
     owner_username = serializers.CharField(source='collection.user.username', read_only=True)

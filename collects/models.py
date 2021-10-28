@@ -7,7 +7,7 @@ from authentication.models import User
 
 class Collect(models.Model):
     collection_name = models.CharField(max_length=30)
-    collection_description = models.CharField(max_length=150, null=True)
+    collection_description = models.CharField(max_length=150, blank=True)
     collection_creation = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
         Category,
@@ -29,7 +29,7 @@ class Collect(models.Model):
 
 class Item(models.Model):
     item_name = models.CharField(max_length=30)
-    item_description = models.TextField()
+    item_description = models.TextField(blank=True)
     item_creation = models.DateTimeField(auto_now_add=True)
     collection = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
 
