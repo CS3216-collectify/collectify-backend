@@ -85,6 +85,9 @@ class UserInfoFromToken(APIView):
                 raise exceptions.ValidationError(detail={"username": ["The username has already been taken."]},
                                                  code=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, format=None):
+        request.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserInfoSearch(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
