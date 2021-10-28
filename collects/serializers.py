@@ -45,7 +45,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     item_id = serializers.ReadOnlyField(source='id')
-    item_name = serializers.CharField(max_length=30)
+    item_name = serializers.CharField(max_length=70)
     item_description = serializers.CharField(allow_blank=True)
     item_creation_date = serializers.DateTimeField(source='item_creation', read_only=True)
     owner_id = serializers.ReadOnlyField(source='collection.user.id')
