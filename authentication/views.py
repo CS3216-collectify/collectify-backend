@@ -117,6 +117,7 @@ class UserInfoFromToken(APIView):
         server_client.delete_user(user_id, mark_messages_deleted=False)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class UserInfoSearch(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
