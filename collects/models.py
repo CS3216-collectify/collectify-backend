@@ -28,7 +28,7 @@ class Collect(models.Model):
 
 
 class Item(models.Model):
-    item_name = models.CharField(max_length=30)
+    item_name = models.CharField(max_length=70)
     item_description = models.TextField(blank=True)
     item_creation = models.DateTimeField(auto_now_add=True)
     collection = models.ForeignKey(Collect, related_name='items', on_delete=models.CASCADE)
