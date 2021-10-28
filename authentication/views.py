@@ -5,12 +5,17 @@ from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+from stream_chat import StreamChat
 
 from collectify.permissions import IsOwnerOrReadOnly
 from .authentication import JWTAuthenticationExcludeSafeMethods
 from .models import User
 from .serializers import CollectifyTokenObtainPairSerializer, UserSerializer, \
     CollectifyTokenObtainPairSerializerUsingIdToken, UserProfileSerializer
+from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
+from collectify.collectifysecrets import STREAM_CHAT_API_KEY
+
+server_client = StreamChat(api_key=STREAM_CHAT_API_KEY, api_secret=STREAM_CHAT_API_SECRET)
 
 
 class ObtainTokenPairWithAddedClaimsView(TokenObtainPairView):
@@ -33,6 +38,12 @@ class UserCreate(APIView):
             if serializer.is_valid():
                 user = serializer.save()
                 if user:
+                    server_client.update_users([{
+                        "id": user.id,
+                        "name": f"{user.first_name} {user.last_name}",
+                        "username": user.username,
+                        "image": user.picture_file.url
+                    }])
                     json = serializer.data
                     return Response(json, status=status.HTTP_201_CREATED)
 
@@ -52,6 +63,13 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         try:
             super().update(request, *args, **kwargs)
+            if "username" in request.data or "first_name" in request.data or "last_name" in request.data or "picture_url" in request.data:
+                server_client.update_users([{
+                    "id": request.user.id,
+                    "name": f"{request.user.first_name} {request.user.last_name}",
+                    "username": request.user.username,
+                    "image": request.user.picture_file.url
+                }])
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ValidationError as err:
             print(err)
@@ -78,6 +96,14 @@ class UserInfoFromToken(APIView):
                 # forcibly invalidate the prefetch cache on the instance.
                 request.user._prefetched_objects_cache = {}
 
+            if "username" in request.data or "first_name" in request.data or "last_name" in request.data or "picture_url" in request.data:
+                server_client.update_users([{
+                    "id": request.user.id,
+                    "name": f"{request.user.first_name} {request.user.last_name}",
+                    "username": request.user.username,
+                    "image": request.user.picture_file.url
+                }])
+
             return Response(status=status.HTTP_204_NO_CONTENT)
         except IntegrityError as err:
             print(err)
@@ -86,7 +112,9 @@ class UserInfoFromToken(APIView):
                                                  code=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, format=None):
+        user_id = request.user.id
         request.user.delete()
+        server_client.delete_user(user_id, mark_messages_deleted=False)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserInfoSearch(generics.ListAPIView):

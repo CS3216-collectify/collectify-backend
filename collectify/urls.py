@@ -25,7 +25,8 @@ urlpatterns = [
     path('followers/', include('followers.urls')),
     path('', include('landing.urls')),
     path('likes/', include('likes.urls')),
-    path('items/', include('itemsearch.urls'))
+    path('items/', include('itemsearch.urls')),
+    path('chat/', include('chat.urls'))
 ]
 
 # Requires DEBUG = False in settings

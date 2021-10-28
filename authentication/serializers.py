@@ -9,8 +9,14 @@ from rest_framework import serializers, exceptions, status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from stream_chat import StreamChat
 
 from .models import User
+
+from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
+from collectify.collectifysecrets import STREAM_CHAT_API_KEY
+
+server_client = StreamChat(api_key=STREAM_CHAT_API_KEY, api_secret=STREAM_CHAT_API_SECRET)
 
 
 class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -87,6 +93,12 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                 self.user.picture_file.save(idinfo['sub'], File(img_temp))
                 self.user.save()
                 self.is_new = True
+                server_client.update_users([{
+                    "id": self.user.id,
+                    "name": f"{self.user.first_name} {self.user.last_name}",
+                    "username": self.user.username,
+                    "image": self.user.picture_file.url
+                }])
 
             if len(queryset) == 1:
                 self.user = queryset[0]
