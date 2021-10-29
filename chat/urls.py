@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import ChatAuth
 
 from chat.views import ChatAuth
 
