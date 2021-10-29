@@ -13,7 +13,7 @@ server_client = StreamChat(api_key=STREAM_CHAT_API_KEY, api_secret=STREAM_CHAT_A
 class ChatAuth(APIView):
     def post(self, request, format=None):
         data = {
-            "chat_id": request.user.id,
-            "chat_token": server_client.create_token(request.user.id)
+            "chat_id": str(request.user.id),
+            "chat_token": server_client.create_token(str(request.user.id))
         }
         return Response(data)

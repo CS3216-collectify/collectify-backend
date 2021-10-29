@@ -39,8 +39,8 @@ class UserCreate(APIView):
                 user = serializer.save()
                 if user:
                     server_client.update_users([{
-                        "id": user.id,
-                        "name": f"{user.first_name} {user.last_name}",
+                        "id": str(user.id),
+                        "name": f"{user.first_name} {user.last_name}".strip(),
                         "username": user.username,
                         "image": user.picture_file.url
                     }])
@@ -98,8 +98,8 @@ class UserInfoFromToken(APIView):
 
             if "username" in request.data or "first_name" in request.data or "last_name" in request.data or "picture_url" in request.data:
                 server_client.update_users([{
-                    "id": request.user.id,
-                    "name": f"{request.user.first_name} {request.user.last_name}",
+                    "id": str(request.user.id),
+                    "name": f"{request.user.first_name} {request.user.last_name}".strip(),
                     "username": request.user.username,
                     "image": request.user.picture_file.url
                 }])
@@ -114,7 +114,7 @@ class UserInfoFromToken(APIView):
     def delete(self, request, format=None):
         user_id = request.user.id
         request.user.delete()
-        server_client.delete_user(user_id, mark_messages_deleted=False)
+        server_client.delete_user(str(user_id), mark_messages_deleted=False)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

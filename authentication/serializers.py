@@ -94,8 +94,8 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                 self.user.save()
                 self.is_new = True
                 server_client.update_users([{
-                    "id": self.user.id,
-                    "name": f"{self.user.first_name} {self.user.last_name}",
+                    "id": str(self.user.id),
+                    "name": f"{self.user.first_name} {self.user.last_name}".strip(),
                     "username": self.user.username,
                     "image": self.user.picture_file.url
                 }])
