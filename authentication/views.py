@@ -42,7 +42,7 @@ class UserCreate(APIView):
                         "id": str(user.id),
                         "name": f"{user.first_name} {user.last_name}".strip(),
                         "username": user.username,
-                        "image": user.picture_file.url
+                        "image": user.picture_file.url.split("?", 1)[0]
                     }])
                     json = serializer.data
                     return Response(json, status=status.HTTP_201_CREATED)
@@ -65,10 +65,10 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
             super().update(request, *args, **kwargs)
             if "username" in request.data or "first_name" in request.data or "last_name" in request.data or "picture_url" in request.data:
                 server_client.update_users([{
-                    "id": request.user.id,
-                    "name": f"{request.user.first_name} {request.user.last_name}",
+                    "id": str(request.user.id),
+                    "name": f"{request.user.first_name} {request.user.last_name}".strip(),
                     "username": request.user.username,
-                    "image": request.user.picture_file.url
+                    "image": request.user.picture_file.url.split("?", 1)[0]
                 }])
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ValidationError as err:
@@ -101,7 +101,7 @@ class UserInfoFromToken(APIView):
                     "id": str(request.user.id),
                     "name": f"{request.user.first_name} {request.user.last_name}".strip(),
                     "username": request.user.username,
-                    "image": request.user.picture_file.url
+                    "image": request.user.picture_file.url.split("?", 1)[0]
                 }])
 
             return Response(status=status.HTTP_204_NO_CONTENT)

@@ -97,7 +97,7 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
                     "id": str(self.user.id),
                     "name": f"{self.user.first_name} {self.user.last_name}".strip(),
                     "username": self.user.username,
-                    "image": self.user.picture_file.url
+                    "image": self.user.picture_file.url.split("?", 1)[0]
                 }])
 
             if len(queryset) == 1:
