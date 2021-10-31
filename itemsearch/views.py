@@ -23,6 +23,8 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Item.objects.all()
         keywords = self.request.query_params.get('keywords')
+        category = self.request.query_params.get('category')
+        is_tradable = self.request.query_params.get('is_tradable')
         is_followed = self.request.query_params.get('followed')
         is_liked = self.request.query_params.get('liked')
         offset = self.request.query_params.get('offset')
@@ -34,6 +36,14 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
             query = SearchQuery(keywords)
             rank = SearchRank(vector, query, normalization=Value(1), cover_density=True)
             queryset = queryset.annotate(rank=rank).filter(rank__gte=0.1).order_by('-rank')
+
+        if category is not None:
+            queryset = queryset.filter(collection__category__category_name__iexact=category)
+
+        if is_tradable and is_tradable.lower() == "true":
+            queryset = queryset.filter(is_tradable=True)
+        elif is_tradable and is_tradable.lower() == "false":
+            queryset = queryset.filter(is_tradable=False)
 
         if self.request.user and self.request.user.is_authenticated:
             if is_followed and is_followed.lower() == "true":
