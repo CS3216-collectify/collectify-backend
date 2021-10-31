@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = collectifysecrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.elasticbeanstalk.com', '127.0.0.1', '172.31.8.124', 'collectify.link', '46.137.226.252', '54.254.69.227']
 
