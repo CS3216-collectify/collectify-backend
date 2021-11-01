@@ -161,6 +161,10 @@ class ItemViewSet(viewsets.ModelViewSet):
             image = Image(image_file=file, item=serializer.instance)
             image.save()
 
+        if 'updated_collection' in request.data:
+            updated_collection_id = request.data['updated_collection']
+            serializer.save(collection=Collect.objects.get(id=updated_collection_id))
+
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def retrieve(self, request, *args, **kwargs):
