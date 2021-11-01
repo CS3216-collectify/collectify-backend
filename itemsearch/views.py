@@ -78,8 +78,7 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
         if not request.user or not request.user.is_authenticated:
             is_followed = request.query_params.get('followed')
             is_liked = request.query_params.get('liked')
-            is_discover = request.query_params.get('discover')
-            if is_followed or is_liked or is_discover:
+            if is_followed or is_liked:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         is_detailed = self.request.query_params.get('detailed')
