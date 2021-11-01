@@ -29,6 +29,7 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
         is_liked = self.request.query_params.get('liked')
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
+        is_discover = self.request.query_params.get('discover')
 
         if keywords is not None:
             vector = SearchVector('item_name', weight='A') \
@@ -62,6 +63,8 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(
                     ~Exists(Like.objects.filter(user=self.request.user, item__id=OuterRef('id')))
                 )
+            if is_discover and is_discover.lower() == "true":
+                queryset = queryset.exclude(collection__user=self.request.user)
 
         if offset is not None and limit is not None:
             queryset = queryset[int(offset):int(offset) + int(limit)]
