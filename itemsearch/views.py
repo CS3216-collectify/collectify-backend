@@ -39,7 +39,7 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
             queryset = queryset.annotate(rank=rank).filter(rank__gte=0.1).order_by('-rank')
 
         if category is not None:
-            queryset = queryset.filter(collection__category__category_name__iexact=category)
+            queryset = queryset.filter(collection__category__id=category)
 
         if is_tradable and is_tradable.lower() == "true":
             queryset = queryset.filter(is_tradable=True)
