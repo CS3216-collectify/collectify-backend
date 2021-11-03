@@ -35,10 +35,19 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
         if keywords is not None:
             vector = SearchVector('collection_name', weight='A') \
-                     + SearchVector('collection_description', weight='B')
+                     + SearchVector('collection_description', weight='B') \
+                     + SearchVector('category__category_name', weight='C')
             query = SearchQuery(keywords)
+
             rank = SearchRank(vector, query, normalization=Value(1), cover_density=True)
-            queryset = queryset.annotate(rank=rank).filter(rank__gte=0.1).order_by('-rank')
+            queryset1 = queryset.annotate(rank=rank).filter(rank__gte=0.01).order_by('-rank')
+
+            items_search_vector = SearchVector('item_name', 'item_description')
+            matched_items = Item.objects.filter(collection__id=OuterRef('id')).annotate(
+                search=items_search_vector).filter(search=query)
+            queryset2 = queryset.filter(Exists(matched_items)).annotate(rank=Value(0.01))
+
+            queryset = (queryset1 | queryset2).distinct()
 
         if user is not None:
             queryset = queryset.filter(user__id=user)

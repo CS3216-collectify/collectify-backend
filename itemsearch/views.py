@@ -34,10 +34,13 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
 
         if keywords is not None:
             vector = SearchVector('item_name', weight='A') \
-                     + SearchVector('item_description', weight='B')
+                     + SearchVector('item_description', weight='B') \
+                     + SearchVector('collection__category__category_name', weight='C') \
+                     + SearchVector('collection__collection_name', weight='C') \
+                     + SearchVector('collection__collection_description', weight='C')
             query = SearchQuery(keywords)
             rank = SearchRank(vector, query, normalization=Value(1), cover_density=True)
-            queryset = queryset.annotate(rank=rank).filter(rank__gte=0.1).order_by('-rank')
+            queryset = queryset.annotate(rank=rank).filter(rank__gte=0.01).order_by('-rank')
 
         if category is not None:
             queryset = queryset.filter(collection__category__id=category)
