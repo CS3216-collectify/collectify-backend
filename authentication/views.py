@@ -4,14 +4,14 @@ from rest_framework import status, permissions, generics, exceptions
 from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from stream_chat import StreamChat
 
 from collectify.permissions import IsOwnerOrReadOnly
 from .authentication import JWTAuthenticationExcludeSafeMethods
 from .models import User
 from .serializers import CollectifyTokenObtainPairSerializer, UserSerializer, \
-    CollectifyTokenObtainPairSerializerUsingIdToken, UserProfileSerializer
+    CollectifyTokenObtainPairSerializerUsingIdToken, UserProfileSerializer, TokenRefreshSerializerWithUserCheck
 from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
 from collectify.collectifysecrets import STREAM_CHAT_API_KEY
 
@@ -26,6 +26,10 @@ class ObtainTokenPairWithAddedClaimsView(TokenObtainPairView):
 class ObtainTokenPairUsingIdToken(TokenObtainPairView):
     permission_classes = (permissions.AllowAny,)  # default requires authentication, hence we must use `AllowAny`
     serializer_class = CollectifyTokenObtainPairSerializerUsingIdToken
+
+
+class TokenRefreshViewWithUserCheck(TokenRefreshView):
+    serializer_class = TokenRefreshSerializerWithUserCheck
 
 
 class UserCreate(APIView):

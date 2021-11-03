@@ -6,7 +6,8 @@ from django.core.files.temp import NamedTemporaryFile
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from rest_framework import serializers, exceptions, status
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from stream_chat import StreamChat
@@ -166,3 +167,11 @@ class UserProfileSerializer(UserSerializer):
         model = User
         fields = ('user_id', 'email', 'username', 'first_name', 'last_name', 'picture_url', 'description',
                   'likes_count', 'collections_count', 'items_count')
+
+
+class TokenRefreshSerializerWithUserCheck(TokenRefreshSerializer):
+    def validate(self, attrs):
+        refresh_token = RefreshToken(attrs['refresh'])
+        authenticator = JWTAuthentication()
+        authenticator.get_user(refresh_token)  # check for valid user
+        return super().validate(attrs)
