@@ -68,7 +68,7 @@ class ItemSerializerWithCover(ItemSerializer):
 
 
 class ItemSerializerWithImages(ItemSerializer):
-    likes_count = serializers.IntegerField(source='like.count', read_only=True)
+    likes_count = serializers.ReadOnlyField()
     images = ImageSerializer(many=True, read_only=True)
     
     class Meta:

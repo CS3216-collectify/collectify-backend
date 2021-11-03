@@ -23,6 +23,9 @@ class Collect(models.Model):
     def __str__(self):
         return self.collection_name
 
+    def items_count(self):
+        return self.items.count()
+
     class Meta:
         ordering = ["-collection_creation"]
 
@@ -43,6 +46,9 @@ class Item(models.Model):
             return images.earliest('image_upload').image_file.url
         else:
             return None
+    
+    def likes_count(self):
+        return self.like.count()
     
     def __str__(self):
         return self.item_name
