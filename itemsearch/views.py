@@ -1,6 +1,7 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Exists, OuterRef, Value
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
 
 from authentication.authentication import JWTAuthenticationWithoutErrorForSafeMethods
 from collectify.permissions import IsOwnerOrReadOnly
@@ -74,6 +75,12 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         response = super(ItemSearchViewSet, self).list(request, *args, **kwargs)
         
+        if not request.user or not request.user.is_authenticated:
+            is_followed = request.query_params.get('followed')
+            is_liked = request.query_params.get('liked')
+            if is_followed or is_liked:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+
         is_detailed = self.request.query_params.get('detailed')
         if not is_detailed or is_detailed.lower() != 'true':
             return response
