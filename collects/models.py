@@ -6,7 +6,7 @@ from authentication.models import User
 # Create your models here.
 
 class Collect(models.Model):
-    collection_name = models.CharField(max_length=30)
+    collection_name = models.CharField(max_length=70)
     collection_description = models.CharField(max_length=150, blank=True)
     collection_creation = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
