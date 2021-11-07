@@ -74,10 +74,10 @@ class Image(models.Model):
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-
-        if not self.make_thumbnail():
-            # set to a default thumbnail
-            raise Exception('Could not create thumbnail. Please check file format')
+        if 'update_fields' not in kwargs or 'image_file' in kwargs['update_fields']:
+            print('Generating thumbnails from image')
+            if not self.make_thumbnail():
+                raise Exception('Could not create thumbnail. Please check file format')
 
         super().save(*args, **kwargs)
 

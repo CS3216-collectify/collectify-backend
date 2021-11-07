@@ -1,17 +1,22 @@
+import os
+from io import BytesIO
+
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.core.files.base import ContentFile
 from django.db.models import Value, Exists, OuterRef
 from django.http import QueryDict
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from authentication.authentication import JWTAuthenticationExcludeSafeMethods, \
-    JWTAuthenticationWithoutErrorForSafeMethods
+from authentication.authentication import JWTAuthenticationWithoutErrorForSafeMethods
 from collectify.permissions import IsOwnerOrReadOnly
-from collects.models import Collect, Item, Image
+from collects.models import Collect, Item, Image, THUMB_SIZE
 from collects.serializers import CollectionSerializer, CollectionSerializerWithCovers, ImageSerializer, \
     ItemSerializerWithCover, ItemSerializerWithImages
 from followers.models import Followers
-from likes.models import Like
+import requests
+import PIL
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -190,3 +195,43 @@ class ItemViewSet(viewsets.ModelViewSet):
 class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
     queryset = Image.objects.all()
+
+
+# Generates thumbnails for images that do not currently have any.
+class GenerateThumbnailsView(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def post(self, request, format=None):
+        queryset = Image.objects.filter(thumbnail_file=None)
+        for instance in queryset:
+            url = instance.image_file.url
+            response = requests.get(url)
+            image = PIL.Image.open(BytesIO(response.content))
+            image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
+
+            thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
+            thumb_extension = thumb_extension.lower()
+
+            thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
+
+            if thumb_extension in ['.jpg', '.jpeg']:
+                file_type = 'JPEG'
+            elif thumb_extension == '.gif':
+                file_type = 'GIF'
+            elif thumb_extension == '.png':
+                file_type = 'PNG'
+            else:
+                return False  # Unrecognized file type
+
+            # Save thumbnail to in-memory file
+            temp_thumb = BytesIO()
+            image.save(temp_thumb, file_type)
+            temp_thumb.seek(0)
+
+            # set save=False, otherwise it will run in an infinite loop
+            instance.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+            temp_thumb.close()
+            instance.save(update_fields=['thumbnail_file'])
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
