@@ -17,6 +17,7 @@ from collects.serializers import CollectionSerializer, CollectionSerializerWithC
 from followers.models import Followers
 import requests
 import PIL
+import imghdr
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -211,18 +212,23 @@ class GenerateThumbnailsView(APIView):
             image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
 
             thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
+
+            if not thumb_extension:
+                thumb_extension = '.' + image.format
+
             thumb_extension = thumb_extension.lower()
 
             thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
 
-            if thumb_extension in ['.jpg', '.jpeg']:
+            if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
                 file_type = 'JPEG'
             elif thumb_extension == '.gif':
                 file_type = 'GIF'
             elif thumb_extension == '.png':
                 file_type = 'PNG'
             else:
-                return False  # Unrecognized file type
+                print("Unknown thumb extension. Skipping.")
+                continue
 
             # Save thumbnail to in-memory file
             temp_thumb = BytesIO()

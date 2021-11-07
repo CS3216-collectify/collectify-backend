@@ -5,6 +5,7 @@ import os.path
 import PIL
 from io import BytesIO
 from django.core.files.base import ContentFile
+import imghdr
 
 THUMB_SIZE = 128, 128
 
@@ -77,21 +78,22 @@ class Image(models.Model):
         if 'update_fields' not in kwargs or 'image_file' in kwargs['update_fields']:
             print('Generating thumbnails from image')
             if not self.make_thumbnail():
-                raise Exception('Could not create thumbnail. Please check file format')
+                print('Could not create thumbnail. Please check file format')
 
         super().save(*args, **kwargs)
 
     def make_thumbnail(self):
-
         image = PIL.Image.open(self.image_file)
         image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
-
         thumb_name, thumb_extension = os.path.splitext(self.image_file.name)
-        thumb_extension = thumb_extension.lower()
 
+        if not thumb_extension:
+            thumb_extension = '.' + image.format
+
+        thumb_extension = thumb_extension.lower()
         thumb_filename = thumb_name + '_thumb' + thumb_extension
 
-        if thumb_extension in ['.jpg', '.jpeg']:
+        if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
             file_type = 'JPEG'
         elif thumb_extension == '.gif':
             file_type = 'GIF'
