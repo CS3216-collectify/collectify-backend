@@ -14,6 +14,7 @@ from pathlib import Path
 from . import collectifysecrets
 from datetime import timedelta
 import os
+import requests
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +30,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['.elasticbeanstalk.com', '127.0.0.1', 'collectify.link', '46.137.226.252', '54.254.69.227']
 
-import requests
 try:
     internal_ip = requests.get('http://instance-data/latest/meta-data/local-ipv4').text
 except requests.exceptions.ConnectionError:
@@ -49,7 +49,6 @@ AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_VERIFY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 
 # Application definition
 
@@ -105,7 +104,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'collectify.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -123,6 +121,7 @@ if 'RDS_DB_NAME' in os.environ:
     }
 else:
     from . import db_info
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -132,7 +131,6 @@ else:
             'PASSWORD': db_info.DB_PASSWORD
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -152,7 +150,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -165,7 +162,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
