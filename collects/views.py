@@ -17,7 +17,6 @@ from collects.serializers import CollectionSerializer, CollectionSerializerWithC
 from followers.models import Followers
 import requests
 import PIL
-import imghdr
 
 
 class CollectionViewSet(viewsets.ModelViewSet):

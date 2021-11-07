@@ -5,7 +5,7 @@ import os.path
 import PIL
 from io import BytesIO
 from django.core.files.base import ContentFile
-import imghdr
+
 
 THUMB_SIZE = 128, 128
 
