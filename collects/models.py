@@ -81,9 +81,10 @@ class Image(models.Model):
                 if not self.make_thumbnail():
                     print('Could not create thumbnail. Please check file format')
 
-            super().save(*args, **kwargs)
         except Exception as err:
             print(err)
+
+        super().save(*args, **kwargs)
 
     def make_thumbnail(self):
         with PIL.Image.open(self.image_file) as image:
