@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 import traceback
 
 
-THUMB_SIZE = 256, 256
+THUMB_SIZE = 360, 360
 
 # Create your models here.
 
