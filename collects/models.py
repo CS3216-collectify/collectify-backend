@@ -75,12 +75,15 @@ class Image(models.Model):
     item = models.ForeignKey(Item, related_name='images', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        if 'update_fields' not in kwargs or 'image_file' in kwargs['update_fields']:
-            print('Generating thumbnails from image')
-            if not self.make_thumbnail():
-                print('Could not create thumbnail. Please check file format')
+        try:
+            if 'update_fields' not in kwargs or 'image_file' in kwargs['update_fields']:
+                print('Generating thumbnails from image')
+                if not self.make_thumbnail():
+                    print('Could not create thumbnail. Please check file format')
 
-        super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
+        except Exception as err:
+            print(err)
 
     def make_thumbnail(self):
         with PIL.Image.open(self.image_file) as image:
@@ -111,7 +114,7 @@ class Image(models.Model):
             # set save=False, otherwise it will run in an infinite loop
             self.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
             temp_thumb.close()
-
+            print('Thumbnail generated successfully')
             return True
 
     def user(self):
