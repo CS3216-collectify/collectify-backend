@@ -213,7 +213,8 @@ class GenerateThumbnailsView(APIView):
             thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
 
             if not thumb_extension:
-                thumb_extension = '.' + image.format
+                if image.format:
+                    thumb_extension = '.' + image.format
 
             thumb_extension = thumb_extension.lower()
 

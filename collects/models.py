@@ -88,7 +88,8 @@ class Image(models.Model):
         thumb_name, thumb_extension = os.path.splitext(self.image_file.name)
 
         if not thumb_extension:
-            thumb_extension = '.' + image.format
+            if image.format:
+                thumb_extension = '.' + image.format
 
         thumb_extension = thumb_extension.lower()
         thumb_filename = thumb_name + '_thumb' + thumb_extension
