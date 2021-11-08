@@ -203,7 +203,7 @@ class GenerateThumbnailsView(APIView):
     authentication_classes = ()
 
     def post(self, request, format=None):
-        queryset = Image.objects.filter(thumbnail_file=None)
+        queryset = Image.objects.all()
         for instance in queryset:
             url = instance.image_file.url
             response = requests.get(url)
