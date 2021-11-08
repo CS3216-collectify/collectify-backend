@@ -207,37 +207,37 @@ class GenerateThumbnailsView(APIView):
         for instance in queryset:
             url = instance.image_file.url
             response = requests.get(url)
-            image = PIL.Image.open(BytesIO(response.content))
-            image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
+            with PIL.Image.open(BytesIO(response.content)) as image:
+                image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
 
-            thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
+                thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
 
-            if not thumb_extension:
-                if image.format:
-                    thumb_extension = '.' + image.format
+                if not thumb_extension:
+                    if image.format:
+                        thumb_extension = '.' + image.format
 
-            thumb_extension = thumb_extension.lower()
+                thumb_extension = thumb_extension.lower()
 
-            thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
+                thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
 
-            if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
-                file_type = 'JPEG'
-            elif thumb_extension == '.gif':
-                file_type = 'GIF'
-            elif thumb_extension == '.png':
-                file_type = 'PNG'
-            else:
-                print("Unknown thumb extension. Skipping.")
-                continue
+                if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
+                    file_type = 'JPEG'
+                elif thumb_extension == '.gif':
+                    file_type = 'GIF'
+                elif thumb_extension == '.png':
+                    file_type = 'PNG'
+                else:
+                    print("Unknown thumb extension. Skipping.")
+                    continue
 
-            # Save thumbnail to in-memory file
-            temp_thumb = BytesIO()
-            image.save(temp_thumb, file_type)
-            temp_thumb.seek(0)
+                # Save thumbnail to in-memory file
+                temp_thumb = BytesIO()
+                image.save(temp_thumb, file_type)
+                temp_thumb.seek(0)
 
-            # set save=False, otherwise it will run in an infinite loop
-            instance.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
-            temp_thumb.close()
-            instance.save(update_fields=['thumbnail_file'])
+                # set save=False, otherwise it will run in an infinite loop
+                instance.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+                temp_thumb.close()
+                instance.save(update_fields=['thumbnail_file'])
 
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)

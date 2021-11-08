@@ -83,36 +83,36 @@ class Image(models.Model):
         super().save(*args, **kwargs)
 
     def make_thumbnail(self):
-        image = PIL.Image.open(self.image_file)
-        image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
-        thumb_name, thumb_extension = os.path.splitext(self.image_file.name)
+        with PIL.Image.open(self.image_file) as image:
+            image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
+            thumb_name, thumb_extension = os.path.splitext(self.image_file.name)
 
-        if not thumb_extension:
-            if image.format:
-                thumb_extension = '.' + image.format
+            if not thumb_extension:
+                if image.format:
+                    thumb_extension = '.' + image.format
 
-        thumb_extension = thumb_extension.lower()
-        thumb_filename = thumb_name + '_thumb' + thumb_extension
+            thumb_extension = thumb_extension.lower()
+            thumb_filename = thumb_name + '_thumb' + thumb_extension
 
-        if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
-            file_type = 'JPEG'
-        elif thumb_extension == '.gif':
-            file_type = 'GIF'
-        elif thumb_extension == '.png':
-            file_type = 'PNG'
-        else:
-            return False  # Unrecognized file type
+            if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
+                file_type = 'JPEG'
+            elif thumb_extension == '.gif':
+                file_type = 'GIF'
+            elif thumb_extension == '.png':
+                file_type = 'PNG'
+            else:
+                return False  # Unrecognized file type
 
-        # Save thumbnail to in-memory file
-        temp_thumb = BytesIO()
-        image.save(temp_thumb, file_type)
-        temp_thumb.seek(0)
+            # Save thumbnail to in-memory file
+            temp_thumb = BytesIO()
+            image.save(temp_thumb, file_type)
+            temp_thumb.seek(0)
 
-        # set save=False, otherwise it will run in an infinite loop
-        self.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
-        temp_thumb.close()
+            # set save=False, otherwise it will run in an infinite loop
+            self.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+            temp_thumb.close()
 
-        return True
+            return True
 
     def user(self):
         return self.item.collection.user
