@@ -5,6 +5,7 @@ import os.path
 import PIL
 from io import BytesIO
 from django.core.files.base import ContentFile
+import traceback
 
 
 THUMB_SIZE = 128, 128
@@ -83,6 +84,8 @@ class Image(models.Model):
 
         except Exception as err:
             print(err)
+            print(traceback.format_exc())
+            print('Could not save thumbnail')
 
         super().save(*args, **kwargs)
 
@@ -97,6 +100,7 @@ class Image(models.Model):
 
             thumb_extension = thumb_extension.lower()
             thumb_filename = thumb_name + '_thumb' + thumb_extension
+            print('Creating thumbnail with name: ' + thumb_filename)
 
             if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
                 file_type = 'JPEG'
@@ -113,7 +117,12 @@ class Image(models.Model):
             temp_thumb.seek(0)
 
             # set save=False, otherwise it will run in an infinite loop
-            self.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+            try:
+                self.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+            except Exception as err:
+                print(err)
+                print('Django is unable to save thumbnail')
+
             temp_thumb.close()
             print('Thumbnail generated successfully')
             return True
