@@ -16,7 +16,7 @@ from collects.serializers import CollectionSerializer, CollectionSerializerWithC
     ItemSerializerWithCover, ItemSerializerWithImages
 from followers.models import Followers
 import requests
-import PIL
+import PIL.Image
 
 
 class CollectionViewSet(viewsets.ModelViewSet):

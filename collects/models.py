@@ -2,7 +2,7 @@ from django.db import models
 from categories.models import Category
 from authentication.models import User
 import os.path
-import PIL
+import PIL.Image
 from io import BytesIO
 from django.core.files.base import ContentFile
 import traceback
