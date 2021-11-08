@@ -89,10 +89,16 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
         popular_threshold = max(popular_threshold, 2)
 
         for response_item in response.data:
-            if Item.objects.get(id=response_item['item_id']).likes_count() >= popular_threshold:
-                response_item['is_popular'] = True
+            if 'likes_count' in response_item: 
+                if response_item['likes_count'] >= popular_threshold:
+                    response_item['is_popular'] = True
+                else:
+                    response_item['is_popular'] = False
             else:
-                response_item['is_popular'] = False
+                if Item.objects.get(id=response_item['item_id']).likes_count() >= popular_threshold:
+                    response_item['is_popular'] = True
+                else:
+                    response_item['is_popular'] = False
 
         is_detailed = self.request.query_params.get('detailed')
         
@@ -105,9 +111,5 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
                 response_item['is_liked'] = True
             else:
                 response_item['is_liked'] = False
-            
-
-
-    
 
         return response
