@@ -178,7 +178,10 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         if 'updated_collection' in request.data:
             updated_collection_id = request.data['updated_collection']
-            serializer.save(collection=Collect.objects.get(id=updated_collection_id))
+            if Collect.objects.get(id=updated_collection_id).user == request.user:
+                serializer.save(collection=Collect.objects.get(id=updated_collection_id))
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
     
