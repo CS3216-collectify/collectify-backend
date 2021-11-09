@@ -2,7 +2,7 @@ import os
 import traceback
 from io import BytesIO
 
-from PIL import ImageOps
+from PIL import ImageOps, ExifTags
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files.base import ContentFile
 from django.db.models import Value, Exists, OuterRef
@@ -214,11 +214,21 @@ class GenerateThumbnailsView(APIView):
                 url = instance.image_file.url
                 response = requests.get(url)
                 with PIL.Image.open(BytesIO(response.content)) as image:
-                    try:
-                        image = ImageOps.exif_transpose(image)
-                    except Exception as err:
-                        print(err)
-                        print(traceback.format_exc())
+                    if hasattr(image, '_getexif'):  # only present in JPEGs
+                        for orientation in ExifTags.TAGS.keys():
+                            if ExifTags.TAGS[orientation] == 'Orientation':
+                                break
+                        e = image._getexif()  # returns None if no EXIF data
+                        if e is not None:
+                            exif = dict(e.items())
+                            orientation = exif[orientation]
+
+                            if orientation == 3:
+                                image = image.transpose(PIL.Image.ROTATE_180)
+                            elif orientation == 6:
+                                image = image.transpose(PIL.Image.ROTATE_270)
+                            elif orientation == 8:
+                                image = image.transpose(PIL.Image.ROTATE_90)
 
                     image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
 
