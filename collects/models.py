@@ -1,3 +1,4 @@
+from PIL import ImageOps
 from django.db import models
 from categories.models import Category
 from authentication.models import User
@@ -7,8 +8,8 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 import traceback
 
-
 THUMB_SIZE = 360, 360
+
 
 # Create your models here.
 
@@ -27,7 +28,7 @@ class Collect(models.Model):
 
     def cover_images(self):
         return [i.cover_image() for i in self.items.order_by('-item_creation')[:3] if i.cover_image()]
-    
+
     def __str__(self):
         return self.collection_name
 
@@ -58,13 +59,13 @@ class Item(models.Model):
                 return image.image_file.url
         else:
             return None
-    
+
     def likes_count(self):
         return self.like.count()
-    
+
     def __str__(self):
         return self.item_name
-    
+
     class Meta:
         ordering = ['-item_creation']
 
@@ -91,6 +92,7 @@ class Image(models.Model):
 
     def make_thumbnail(self):
         with PIL.Image.open(self.image_file) as image:
+            image = ImageOps.exif_transpose(image)
             image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
             thumb_name, thumb_extension = os.path.splitext(self.image_file.name)
 

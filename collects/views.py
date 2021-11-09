@@ -1,6 +1,7 @@
 import os
 from io import BytesIO
 
+from PIL import ImageOps
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files.base import ContentFile
 from django.db.models import Value, Exists, OuterRef
@@ -208,6 +209,7 @@ class GenerateThumbnailsView(APIView):
             url = instance.image_file.url
             response = requests.get(url)
             with PIL.Image.open(BytesIO(response.content)) as image:
+                image = ImageOps.exif_transpose(image)
                 image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
 
                 thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
