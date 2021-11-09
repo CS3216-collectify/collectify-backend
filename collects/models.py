@@ -128,7 +128,7 @@ class Image(models.Model):
             elif thumb_extension == '.png':
                 file_type = 'PNG'
             else:
-                print('File format is not recognized')
+                print(f"Unknown thumb extension {thumb_extension}. Skipping.")
                 return False  # Unrecognized file type
 
             # Save thumbnail to in-memory file

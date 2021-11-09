@@ -209,7 +209,7 @@ class GenerateThumbnailsView(APIView):
 
     def post(self, request, format=None):
         try:
-            queryset = Image.objects.all()
+            queryset = Image.objects.filter(thumbnail_file=None)
             for instance in queryset:
                 url = instance.image_file.url
                 response = requests.get(url)
@@ -251,7 +251,7 @@ class GenerateThumbnailsView(APIView):
                     elif thumb_extension == '.png':
                         file_type = 'PNG'
                     else:
-                        print("Unknown thumb extension. Skipping.")
+                        print(f"Unknown thumb extension {thumb_extension}. Skipping.")
                         continue
 
                     # Save thumbnail to in-memory file
