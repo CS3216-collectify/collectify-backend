@@ -1,4 +1,5 @@
 import os
+import traceback
 from io import BytesIO
 
 from PIL import ImageOps
@@ -207,42 +208,51 @@ class GenerateThumbnailsView(APIView):
     authentication_classes = ()
 
     def post(self, request, format=None):
-        queryset = Image.objects.all()
-        for instance in queryset:
-            url = instance.image_file.url
-            response = requests.get(url)
-            with PIL.Image.open(BytesIO(response.content)) as image:
-                image = ImageOps.exif_transpose(image)
-                image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
+        try:
+            queryset = Image.objects.all()
+            for instance in queryset:
+                url = instance.image_file.url
+                response = requests.get(url)
+                with PIL.Image.open(BytesIO(response.content)) as image:
+                    try:
+                        image = ImageOps.exif_transpose(image)
+                    except Exception as err:
+                        print(err)
+                        print(traceback.format_exc())
 
-                thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
+                    image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
 
-                if not thumb_extension:
-                    if image.format:
-                        thumb_extension = '.' + image.format
+                    thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
 
-                thumb_extension = thumb_extension.lower()
+                    if not thumb_extension:
+                        if image.format:
+                            thumb_extension = '.' + image.format
 
-                thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
+                    thumb_extension = thumb_extension.lower()
 
-                if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
-                    file_type = 'JPEG'
-                elif thumb_extension == '.gif':
-                    file_type = 'GIF'
-                elif thumb_extension == '.png':
-                    file_type = 'PNG'
-                else:
-                    print("Unknown thumb extension. Skipping.")
-                    continue
+                    thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
 
-                # Save thumbnail to in-memory file
-                temp_thumb = BytesIO()
-                image.save(temp_thumb, file_type)
-                temp_thumb.seek(0)
+                    if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
+                        file_type = 'JPEG'
+                    elif thumb_extension == '.gif':
+                        file_type = 'GIF'
+                    elif thumb_extension == '.png':
+                        file_type = 'PNG'
+                    else:
+                        print("Unknown thumb extension. Skipping.")
+                        continue
 
-                # set save=False, otherwise it will run in an infinite loop
-                instance.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
-                temp_thumb.close()
-                instance.save(update_fields=['thumbnail_file'])
+                    # Save thumbnail to in-memory file
+                    temp_thumb = BytesIO()
+                    image.save(temp_thumb, file_type)
+                    temp_thumb.seek(0)
+
+                    # set save=False, otherwise it will run in an infinite loop
+                    instance.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+                    temp_thumb.close()
+                    instance.save(update_fields=['thumbnail_file'])
+        except Exception as error:
+            print("Error occurred.")
+            traceback.print_exc()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
