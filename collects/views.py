@@ -214,6 +214,9 @@ class GenerateThumbnailsView(APIView):
                 url = instance.image_file.url
                 response = requests.get(url)
                 with PIL.Image.open(BytesIO(response.content)) as image:
+                    src_extension = None
+                    if image.format:
+                        src_extension = '.' + image.format
                     if hasattr(image, '_getexif'):  # only present in JPEGs
                         for orientation in ExifTags.TAGS.keys():
                             if ExifTags.TAGS[orientation] == 'Orientation':
@@ -234,9 +237,8 @@ class GenerateThumbnailsView(APIView):
 
                     thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
 
-                    if not thumb_extension:
-                        if image.format:
-                            thumb_extension = '.' + image.format
+                    if not thumb_extension and src_extension:
+                        thumb_extension = src_extension
 
                     thumb_extension = thumb_extension.lower()
 

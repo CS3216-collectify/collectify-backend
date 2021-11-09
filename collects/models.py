@@ -92,6 +92,9 @@ class Image(models.Model):
 
     def make_thumbnail(self):
         with PIL.Image.open(self.image_file) as image:
+            src_extension = None
+            if image.format:
+                src_extension = '.' + image.format
             if hasattr(image, '_getexif'):  # only present in JPEGs
                 for orientation in ExifTags.TAGS.keys():
                     if ExifTags.TAGS[orientation] == 'Orientation':
@@ -111,9 +114,8 @@ class Image(models.Model):
             image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
             thumb_name, thumb_extension = os.path.splitext(self.image_file.name)
 
-            if not thumb_extension:
-                if image.format:
-                    thumb_extension = '.' + image.format
+            if not thumb_extension and src_extension:
+                thumb_extension = src_extension
 
             thumb_extension = thumb_extension.lower()
             thumb_filename = thumb_name + '_thumb' + thumb_extension
@@ -126,6 +128,7 @@ class Image(models.Model):
             elif thumb_extension == '.png':
                 file_type = 'PNG'
             else:
+                print('File format is not recognized')
                 return False  # Unrecognized file type
 
             # Save thumbnail to in-memory file
