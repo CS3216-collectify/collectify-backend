@@ -94,22 +94,9 @@ class Image(models.Model):
         with PIL.Image.open(self.image_file) as image:
             src_extension = None
             if image.format:
+                print('inferred file format: '+image.format)
                 src_extension = '.' + image.format
-            if hasattr(image, '_getexif'):  # only present in JPEGs
-                for orientation in ExifTags.TAGS.keys():
-                    if ExifTags.TAGS[orientation] == 'Orientation':
-                        break
-                e = image._getexif()  # returns None if no EXIF data
-                if e is not None:
-                    exif = dict(e.items())
-                    orientation = exif[orientation]
-
-                    if orientation == 3:
-                        image = image.transpose(PIL.Image.ROTATE_180)
-                    elif orientation == 6:
-                        image = image.transpose(PIL.Image.ROTATE_270)
-                    elif orientation == 8:
-                        image = image.transpose(PIL.Image.ROTATE_90)
+            image = ImageOps.exif_transpose(image)
 
             image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
             thumb_name, thumb_extension = os.path.splitext(self.image_file.name)

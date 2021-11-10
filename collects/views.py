@@ -216,22 +216,9 @@ class GenerateThumbnailsView(APIView):
                 with PIL.Image.open(BytesIO(response.content)) as image:
                     src_extension = None
                     if image.format:
+                        print('inferred file format: ' + image.format)
                         src_extension = '.' + image.format
-                    if hasattr(image, '_getexif'):  # only present in JPEGs
-                        for orientation in ExifTags.TAGS.keys():
-                            if ExifTags.TAGS[orientation] == 'Orientation':
-                                break
-                        e = image._getexif()  # returns None if no EXIF data
-                        if e is not None:
-                            exif = dict(e.items())
-                            orientation = exif[orientation]
-
-                            if orientation == 3:
-                                image = image.transpose(PIL.Image.ROTATE_180)
-                            elif orientation == 6:
-                                image = image.transpose(PIL.Image.ROTATE_270)
-                            elif orientation == 8:
-                                image = image.transpose(PIL.Image.ROTATE_90)
+                    image = ImageOps.exif_transpose(image)
 
                     image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
 
@@ -243,6 +230,7 @@ class GenerateThumbnailsView(APIView):
                     thumb_extension = thumb_extension.lower()
 
                     thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
+                    print('Generating thumb: ' + thumb_filename)
 
                     if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
                         file_type = 'JPEG'
