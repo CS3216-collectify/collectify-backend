@@ -8,7 +8,7 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 import traceback
 
-THUMB_SIZE = 360, 360
+THUMB_SIZE = 512, 512
 
 
 # Create your models here.
