@@ -12,10 +12,9 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from stream_chat import StreamChat
 
-from .models import User
-
-from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
 from collectify.collectifysecrets import STREAM_CHAT_API_KEY
+from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
+from .models import User
 
 server_client = StreamChat(api_key=STREAM_CHAT_API_KEY, api_secret=STREAM_CHAT_API_SECRET)
 
@@ -25,9 +24,6 @@ class CollectifyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims:
-        # token['key_name'] = user.some_key
         return token
 
     def validate(self, attrs):
@@ -48,9 +44,6 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
     @classmethod
     def get_token(cls, user):
         token = RefreshToken.for_user(user)
-
-        # Add custom claims:
-        # token['key_name'] = user.some_key
         return token
 
     def validate(self, attrs):
@@ -61,10 +54,6 @@ class CollectifyTokenObtainPairSerializerUsingIdToken(serializers.Serializer):
 
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
                 raise ValueError('Wrong issuer.')
-
-            # Verify that the client is one of ours.
-            # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
-            #     raise ValueError('Could not verify audience.')
 
             # Get email address and search database for user
             # If none then create a new user
@@ -150,7 +139,7 @@ class UserSerializer(serializers.ModelSerializer):
         try:
             instance.save()
             return instance
-        except Exception as err:
+        except Exception:
             raise exceptions.APIException(detail="User already exists", code=status.HTTP_400_BAD_REQUEST)
 
 

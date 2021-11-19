@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from authentication.models import User
 from collects.models import Collect
 from followers.models import Followers
 

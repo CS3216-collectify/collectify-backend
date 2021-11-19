@@ -74,22 +74,22 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
             queryset = queryset[int(offset):int(offset) + int(limit)]
 
         return queryset
-    
+
     def list(self, request, *args, **kwargs):
         response = super(ItemSearchViewSet, self).list(request, *args, **kwargs)
-        
+
         if not request.user or not request.user.is_authenticated:
             is_followed = request.query_params.get('followed')
             is_liked = request.query_params.get('liked')
             if is_followed or is_liked:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        avg_like_count = Like.objects.count()/Item.objects.count()
+        avg_like_count = Like.objects.count() / Item.objects.count()
         popular_threshold = 2 * avg_like_count
         popular_threshold = max(popular_threshold, 2)
 
         for response_item in response.data:
-            if 'likes_count' in response_item: 
+            if 'likes_count' in response_item:
                 if response_item['likes_count'] >= popular_threshold:
                     response_item['is_popular'] = True
                 else:
@@ -101,10 +101,10 @@ class ItemSearchViewSet(viewsets.ModelViewSet):
                     response_item['is_popular'] = False
 
         is_detailed = self.request.query_params.get('detailed')
-        
+
         if not is_detailed or is_detailed.lower() != 'true':
             return response
-        
+
         for response_item in response.data:
             if self.request.user and self.request.user.is_authenticated and \
                     Like.objects.filter(user=self.request.user).filter(item=response_item['item_id']).exists():

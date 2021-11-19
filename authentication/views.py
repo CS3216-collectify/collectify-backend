@@ -6,16 +6,30 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from stream_chat import StreamChat
+from stream_chat.base.exceptions import StreamAPIException
 
+from collectify.collectifysecrets import STREAM_CHAT_API_KEY
+from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
 from collectify.permissions import IsOwnerOrReadOnly
 from .authentication import JWTAuthenticationExcludeSafeMethods
 from .models import User
 from .serializers import CollectifyTokenObtainPairSerializer, UserSerializer, \
     CollectifyTokenObtainPairSerializerUsingIdToken, UserProfileSerializer, TokenRefreshSerializerWithUserCheck
-from collectify.collectifysecrets import STREAM_CHAT_API_SECRET
-from collectify.collectifysecrets import STREAM_CHAT_API_KEY
 
 server_client = StreamChat(api_key=STREAM_CHAT_API_KEY, api_secret=STREAM_CHAT_API_SECRET)
+
+
+def update_stream_chat_info(request):
+    if "username" in request.data \
+            or "first_name" in request.data \
+            or "last_name" in request.data \
+            or "picture_url" in request.data:
+        server_client.update_users([{
+            "id": str(request.user.id),
+            "name": f"{request.user.first_name} {request.user.last_name}".strip(),
+            "username": request.user.username,
+            "image": request.user.picture_file.url.split("?", 1)[0]
+        }])
 
 
 class ObtainTokenPairWithAddedClaimsView(TokenObtainPairView):
@@ -67,13 +81,7 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         try:
             super().update(request, *args, **kwargs)
-            if "username" in request.data or "first_name" in request.data or "last_name" in request.data or "picture_url" in request.data:
-                server_client.update_users([{
-                    "id": str(request.user.id),
-                    "name": f"{request.user.first_name} {request.user.last_name}".strip(),
-                    "username": request.user.username,
-                    "image": request.user.picture_file.url.split("?", 1)[0]
-                }])
+            update_stream_chat_info(request)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ValidationError as err:
             print(err)
@@ -83,6 +91,11 @@ class UserInfo(generics.RetrieveUpdateDestroyAPIView):
             if "unique constraint \"authentication_user_username_key\"" in str(err):
                 raise exceptions.ValidationError(detail={"username": ["The username has already been taken."]},
                                                  code=status.HTTP_400_BAD_REQUEST)
+        except StreamAPIException as err:
+            print(err)
+            raise exceptions.ValidationError(detail="StreamChat is unable to update this user. "
+                                                    "Please check if the user is valid",
+                                             code=status.HTTP_400_BAD_REQUEST)
 
 
 class UserInfoFromToken(APIView):
@@ -100,20 +113,18 @@ class UserInfoFromToken(APIView):
                 # forcibly invalidate the prefetch cache on the instance.
                 request.user._prefetched_objects_cache = {}
 
-            if "username" in request.data or "first_name" in request.data or "last_name" in request.data or "picture_url" in request.data:
-                server_client.update_users([{
-                    "id": str(request.user.id),
-                    "name": f"{request.user.first_name} {request.user.last_name}".strip(),
-                    "username": request.user.username,
-                    "image": request.user.picture_file.url.split("?", 1)[0]
-                }])
-
+            update_stream_chat_info(request)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except IntegrityError as err:
             print(err)
             if "unique constraint \"authentication_user_username_key\"" in str(err):
                 raise exceptions.ValidationError(detail={"username": ["The username has already been taken."]},
                                                  code=status.HTTP_400_BAD_REQUEST)
+        except StreamAPIException as err:
+            print(err)
+            raise exceptions.ValidationError(detail="StreamChat is unable to update this user. "
+                                                    "Please check if the user is valid",
+                                             code=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, format=None):
         user_id = request.user.id

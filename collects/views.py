@@ -1,24 +1,15 @@
-import os
-import traceback
-from io import BytesIO
-
-from PIL import ImageOps, ExifTags
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.core.files.base import ContentFile
 from django.db.models import Value, Exists, OuterRef
 from django.http import QueryDict
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from authentication.authentication import JWTAuthenticationWithoutErrorForSafeMethods
 from collectify.permissions import IsOwnerOrReadOnly
-from collects.models import Collect, Item, Image, THUMB_SIZE
+from collects.models import Collect, Item, Image
 from collects.serializers import CollectionSerializer, CollectionSerializerWithCovers, ImageSerializer, \
     ItemSerializerWithCover, ItemSerializerWithImages
 from followers.models import Followers
-import requests
-import PIL.Image
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -87,22 +78,24 @@ class CollectionViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         response = super(CollectionViewSet, self).retrieve(request, *args, **kwargs)
 
-        if self.request.user and self.request.user.is_authenticated and self.get_object().followers.filter(user=self.request.user).exists():
+        if self.request.user and self.request.user.is_authenticated and self.get_object().followers.filter(
+                user=self.request.user).exists():
             response.data['is_followed'] = True
         else:
             response.data['is_followed'] = False
         return response
-    
+
     def list(self, request, *args, **kwargs):
         response = super(CollectionViewSet, self).list(request, *args, **kwargs)
 
         for response_collection in response.data:
             if self.request.user and self.request.user.is_authenticated and \
-                    Followers.objects.filter(user=self.request.user).filter(collection=response_collection['collection_id']).exists():
+                    Followers.objects.filter(user=self.request.user).filter(
+                        collection=response_collection['collection_id']).exists():
                 response_collection['is_followed'] = True
             else:
                 response_collection['is_followed'] = False
-        
+
         return response
 
 
@@ -185,74 +178,19 @@ class ItemViewSet(viewsets.ModelViewSet):
                 return Response(status=status.HTTP_403_FORBIDDEN)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     def retrieve(self, request, *args, **kwargs):
         response = super(ItemViewSet, self).retrieve(request, *args, **kwargs)
 
-        if self.request.user and self.request.user.is_authenticated and self.get_object().like.filter(user=self.request.user).exists():
+        if self.request.user and self.request.user.is_authenticated and self.get_object().like.filter(
+                user=self.request.user).exists():
             response.data['is_liked'] = True
         else:
             response.data['is_liked'] = False
-        
+
         return response
 
 
 class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
     queryset = Image.objects.all()
-
-
-# Generates thumbnails for images that do not currently have any.
-class GenerateThumbnailsView(APIView):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = ()
-
-    def post(self, request, format=None):
-        try:
-            queryset = Image.objects.filter(thumbnail_file=None)
-            for instance in queryset:
-                url = instance.image_file.url
-                response = requests.get(url)
-                with PIL.Image.open(BytesIO(response.content)) as image:
-                    src_extension = None
-                    if image.format:
-                        print('inferred file format: ' + image.format)
-                        src_extension = '.' + image.format
-                    image = ImageOps.exif_transpose(image)
-
-                    image.thumbnail(THUMB_SIZE, PIL.Image.ANTIALIAS)
-
-                    thumb_name, thumb_extension = os.path.splitext(instance.image_file.name)
-
-                    if not thumb_extension and src_extension:
-                        thumb_extension = src_extension
-
-                    thumb_extension = thumb_extension.lower()
-
-                    thumb_filename = '/'.join(thumb_name.split('/')[1:]) + '_thumb' + thumb_extension
-                    print('Generating thumb: ' + thumb_filename)
-
-                    if thumb_extension in ['.jpg', '.jpeg', '.jfif']:
-                        file_type = 'JPEG'
-                    elif thumb_extension == '.gif':
-                        file_type = 'GIF'
-                    elif thumb_extension == '.png':
-                        file_type = 'PNG'
-                    else:
-                        print(f"Unknown thumb extension {thumb_extension}. Skipping.")
-                        continue
-
-                    # Save thumbnail to in-memory file
-                    temp_thumb = BytesIO()
-                    image.save(temp_thumb, file_type)
-                    temp_thumb.seek(0)
-
-                    # set save=False, otherwise it will run in an infinite loop
-                    instance.thumbnail_file.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
-                    temp_thumb.close()
-                    instance.save(update_fields=['thumbnail_file'])
-        except Exception as error:
-            print("Error occurred.")
-            traceback.print_exc()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)

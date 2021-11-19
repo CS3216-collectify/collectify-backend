@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from categories.models import Category
 from collects.models import Collect, Item, Image
-from likes.models import Like
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -17,12 +16,11 @@ class CollectionSerializer(serializers.ModelSerializer):
                                                      source='category')
     category_name = serializers.ReadOnlyField(read_only=True, source='category.category_name')
     followers_count = serializers.ReadOnlyField(read_only=True, source='followers.count')
-    
 
     class Meta:
         model = Collect
         fields = ('collection_id', 'collection_name', 'collection_description', 'collection_creation_date',
-                  'owner_id', 'owner_username', 'category_id', 'category_name', 'followers_count', )
+                  'owner_id', 'owner_username', 'category_id', 'category_name', 'followers_count',)
 
 
 class CollectionSerializerWithCovers(CollectionSerializer):
@@ -38,6 +36,7 @@ class ImageSerializer(serializers.ModelSerializer):
     image_id = serializers.ReadOnlyField(source='id')
     image_url = serializers.URLField(source='image_file.url', read_only=True)
     image_upload_date = serializers.DateTimeField(source='image_upload', read_only=True)
+
     class Meta:
         model = Image
         fields = ['image_id', 'image_url', 'image_upload_date']
@@ -55,24 +54,24 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name', 'is_tradable']
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id',
+                  'owner_username', 'collection_id', 'collection_name', 'is_tradable']
 
 
 class ItemSerializerWithCover(ItemSerializer):
     cover_image = serializers.URLField(read_only=True)
+
     class Meta:
         model = Item
-        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name', 'cover_image', 'is_tradable']
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id',
+                  'owner_username', 'collection_id', 'collection_name', 'cover_image', 'is_tradable']
 
 
 class ItemSerializerWithImages(ItemSerializer):
     likes_count = serializers.ReadOnlyField()
     images = ImageSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Item
-        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id', 
-        'owner_username', 'collection_id', 'collection_name', 'likes_count', 'images', 'is_tradable']
-
+        fields = ['item_id', 'item_name', 'item_description', 'item_creation_date', 'owner_id',
+                  'owner_username', 'collection_id', 'collection_name', 'likes_count', 'images', 'is_tradable']

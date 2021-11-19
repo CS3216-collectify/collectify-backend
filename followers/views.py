@@ -43,7 +43,6 @@ class FollowerViewSet(viewsets.ModelViewSet):
         collection = self.request.query_params.get('collection')
         if not collection:
             raise exceptions.ParseError()
-            
+
         self.get_queryset().filter(user=request.user).filter(collection=collection).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-

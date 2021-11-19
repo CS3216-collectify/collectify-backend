@@ -1,7 +1,8 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.db.models import Sum, Count
 import functools
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.db.models import Count
 
 
 class User(AbstractUser):
@@ -15,17 +16,13 @@ class User(AbstractUser):
             return self.picture_file.url
 
     def items_count(self):
-        # return Item.objects.filter(collection__in=Subquery(Collect.objects.filter(user=self)))
         collects = self.collects.annotate(Count('items'))
         return functools.reduce(lambda a, b: a + b.items__count, collects, 0)
-    
-    def likes_count(self):
-        #return Like.objects.filter(item__collection__user=self).count()
 
+    def likes_count(self):
         total_likes = 0
         for collect in self.collects.all():
             for item in collect.items.all():
                 total_likes += item.like.count()
 
         return total_likes
-

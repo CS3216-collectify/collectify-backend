@@ -1,12 +1,14 @@
-from PIL import ImageOps, ExifTags
-from django.db import models
-from categories.models import Category
-from authentication.models import User
 import os.path
-import PIL.Image
-from io import BytesIO
-from django.core.files.base import ContentFile
 import traceback
+from io import BytesIO
+
+import PIL.Image
+from PIL import ImageOps
+from django.core.files.base import ContentFile
+from django.db import models
+
+from authentication.models import User
+from categories.models import Category
 
 THUMB_SIZE = 512, 512
 
@@ -94,7 +96,7 @@ class Image(models.Model):
         with PIL.Image.open(self.image_file) as image:
             src_extension = None
             if image.format:
-                print('inferred file format: '+image.format)
+                print('inferred file format: ' + image.format)
                 src_extension = '.' + image.format
             image = ImageOps.exif_transpose(image)
 
